@@ -43,7 +43,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: mybatis/**/*Mapper.xml
-  typeAliasesPackage: com.wx.springboot.**.domain
+  typeAliasesPackage: com.wx.springboot.**.domain,com.wx.springboot.**.entity
 
 #mybatis plus 设置
 mybatis-plus:

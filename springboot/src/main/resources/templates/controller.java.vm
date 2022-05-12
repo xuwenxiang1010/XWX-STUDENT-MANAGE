@@ -1,0 +1,69 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import com.wx.springboot.system.common.vo.Result;
+import $!{package.Service}.${table.serviceName};
+import ${package.Entity}.${entity};
+import org.springframework.web.bind.annotation.RestController;
+
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+
+@RestController
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+public class ${table.controllerName} {
+    @Autowired
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    @GetMapping("/list")
+    @ApiOperation(value = "列表查询")
+	public Result list(){
+		List<${entity}> list = ${table.entityPath}Service.list();
+		return Result.success(list);
+    }
+
+    @GetMapping("/pageList")
+	@ApiOperation(value = "分页查询")
+	public Result pageList(${entity} ${table.entityPath}, @RequestParam Integer pageNum, @RequestParam Integer pageSize){
+		IPage<${entity}> page = new Page<>(pageNum,pageSize);
+		IPage<${entity}> pageList = ${table.entityPath}Service.pageList(page,${table.entityPath});
+		return Result.success(pageList);
+    }
+
+    @PostMapping("/add")
+    @ApiOperation(value = "增加")
+    public Result add(@RequestBody ${entity} ${table.entityPath}){
+        Result result = ${table.entityPath}Service.add(${table.entityPath});
+        return result;
+    }
+
+    @PostMapping("/delete/{id}")
+    @ApiOperation(value = "删除")
+    public Result delete(@PathVariable Long id){
+        Result result = ${table.entityPath}Service.deleted(id);
+        return result;
+    }
+
+    @PostMapping("/update")
+    @ApiOperation(value = "修改")
+    public Result update(@RequestBody ${entity} ${table.entityPath}){
+        Result result = ${table.entityPath}Service.update(${table.entityPath});
+        return result;
+    }
+
+}

@@ -1,0 +1,60 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import java.util.List;
+import com.wx.springboot.system.common.vo.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} implements ${table.serviceName} {
+
+	@Autowired
+	private ${table.mapperName} ${table.entityPath}Mapper;
+
+	@Override
+    public List<${entity}> list(){
+        return ${table.entityPath}Mapper.list();
+    }
+
+    @Override
+	public IPage<${entity}> pageList(IPage<${entity}> page, ${entity} ${table.entityPath}) {
+		LambdaQueryWrapper<${entity}> query = new LambdaQueryWrapper<>();
+		//todo：设置的分页查询条件
+		IPage<${entity}> pageList = ${table.entityPath}Mapper.selectPage(page,query);
+		return pageList;
+    }
+
+	@Override
+	public Result add(${entity} ${table.entityPath}) {
+		int add = ${table.entityPath}Mapper.insert(${table.entityPath});
+		return Result.success("添加成功");
+	}
+
+	@Override
+	public Result deleted(Long id) {
+		${entity} ${table.entityPath} = ${table.entityPath}Mapper.selectById(id);
+		//todo：判断删除的字段，一般是deleted软删除
+		int delete = ${table.entityPath}Mapper.updateById(${table.entityPath});
+		return Result.success();
+	}
+
+	@Override
+	public Result update(${entity} ${table.entityPath}) {
+		int update = ${table.entityPath}Mapper.updateById(${table.entityPath});
+		return Result.success("修改成功");
+	}
+}

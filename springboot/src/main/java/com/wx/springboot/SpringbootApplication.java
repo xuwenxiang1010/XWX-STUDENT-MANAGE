@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author xwx
  */
 @SpringBootApplication
-@MapperScan("com.wx.springboot.**.dao")
+@MapperScan({"com.wx.springboot.**.dao" , "com.wx.springboot.**.mapper"})
 public class SpringbootApplication {
 
     public static void main(String[] args) {

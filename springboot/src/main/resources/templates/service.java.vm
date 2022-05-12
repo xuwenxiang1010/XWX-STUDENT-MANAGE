@@ -1,0 +1,30 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wx.springboot.system.common.vo.Result;
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName}{
+
+	List<${entity}> list();
+
+    IPage<${entity}> pageList(IPage<Course> page, ${entity} ${table.entityPath});
+
+    Result add(${entity} ${table.entityPath});
+
+    Result deleted(Long id);
+
+    Result update(${entity} ${table.entityPath});
+
+}
+
