@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-Vue.use(Router)
+Vue.use(Router);
+
 
 const routes = [
   //静态路由：全都能看到
@@ -47,7 +48,7 @@ export const setRoutes = () => {
     //获取当前的路由对象名称数组
     const currentRoute = router.getRoutes().map(v => v.name)
     if (!currentRoute.includes('system')){
-      const systemRoute = {path: "/system" , name: 'system' , component:() => import('../views/system/System'), redirect: "/system/home", children: [
+      const systemRoute = {path: "/system" , name: 'system' , component:() => import('../views/system/System'), redirect: "/home", children: [
           {path: "/userInfo", name:'个人信息', component:() => import('../views/user/UserInfo')}
         ]}
       const menus = JSON.parse(storeMenuList)
