@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column align="center" label="下载链接" >
         <template slot-scope="scope">
-          <el-button type="primary" @click="download(scope.row.url)">下载</el-button>
+          <el-button type="primary" @click="download(scope.row)">下载</el-button>
         </template>
       </el-table-column>
       <el-table-column align="center" label="状态">
@@ -130,8 +130,8 @@ export default {
         }
       })
     },
-    download(url){
-      window.open(url)
+    download(row){
+      window.open(row.url)
     },
     changeStatus(row){
       this.request.post(this.url.update,row).then(res => {

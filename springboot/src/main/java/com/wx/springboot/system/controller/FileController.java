@@ -29,20 +29,20 @@ public class FileController {
      * @throws IOException
      */
     @PostMapping("/upload")
-    public Result upload(@RequestParam MultipartFile file) throws IOException {
+    public Result upload(@RequestParam MultipartFile file){
         Result result = fileService.upload(file);
         return result;
     }
 
     /**
      * 文件下载接口
-     * @param name
+     * @param filePath
      * @param response
      * @throws IOException
      */
-    @GetMapping("/download/{name}")
-    public void download(@PathVariable String name, HttpServletResponse response) throws IOException {
-        fileService.download(name,response);
+    @GetMapping("/download/{filePath}")
+    public void download(@PathVariable String filePath, HttpServletResponse response){
+        fileService.download(filePath,response);
     }
 
     @GetMapping("/pageList")

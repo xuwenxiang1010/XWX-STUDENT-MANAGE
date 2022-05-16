@@ -16,9 +16,9 @@ import java.io.UnsupportedEncodingException;
  */
 public interface FileService {
 
-    Result upload(MultipartFile file) throws IOException;
+    Result upload(MultipartFile file);
 
-    void download(String name, HttpServletResponse response) throws IOException;
+    void download(String filePath, HttpServletResponse response);
 
     IPage<Files> pageList(IPage<Files> page, Files files);
 
