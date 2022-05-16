@@ -1,7 +1,10 @@
 package com.wx.springboot.workplace.books.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.wx.springboot.workplace.books.enums.CategoryEnum;
+import com.wx.springboot.workplace.books.enums.NatureEnum;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,7 +29,6 @@ public class BookRecords {
 
     private String bookName;
 
-
     private Integer bookNature;
 
     private Integer bookCategory;
@@ -45,4 +47,17 @@ public class BookRecords {
 
     private Integer deleted;
 
+    @TableField(exist = false)
+    private String natureName;
+
+    @TableField(exist = false)
+    private String categoryName;
+
+    public String getNatureName() {
+        return NatureEnum.valueByCode(getBookNature());
+    }
+
+    public String getCategoryName() {
+        return CategoryEnum.valueByCode(getBookCategory());
+    }
 }
