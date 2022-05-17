@@ -63,8 +63,8 @@
         </el-form-item>
         <el-form-item label="图标">
           <el-select clearable v-model="form.icon" placeholder="请选择" style="width: 100%;">
-            <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.value">
-              <i :class="item.value"/>{{item.value}}
+            <el-option v-for="item in options" :key="item.text" :label="item.text" :value="item.value">
+              <i :class="item.value"/>{{item.text}}
             </el-option>
           </el-select>
         </el-form-item>
@@ -88,7 +88,7 @@
         </el-form-item>
         <el-form-item label="图标">
           <el-select clearable v-model="form.icon" placeholder="请选择" style="width: 100%;">
-            <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.value">
+            <el-option v-for="item in options" :key="item.text" :label="item.text" :value="item.value">
               <i :class="item.value"/>{{item.value}}
             </el-option>
           </el-select>
@@ -162,7 +162,7 @@ export default {
 
       //获得图标
       this.request.get(this.url.icons).then(res => {
-        this.options = res.data.data
+        this.options = res.data
       })
     },
     handleEdit(row){
@@ -171,7 +171,7 @@ export default {
 
       //获得图标
       this.request.get(this.url.icons).then(res => {
-        this.options = res.data.data
+        this.options = res.data
       })
     },
     save(){

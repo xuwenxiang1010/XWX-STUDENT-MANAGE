@@ -105,10 +105,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private void deleteRoleMenu(Long roleId){
-        /*LambdaQueryWrapper<RoleMenu> query = new LambdaQueryWrapper<>();
-        query.eq(RoleMenu::getRoleId,roleId);
-        int del = roleMenuMapper.delete(query);
-        */
         roleMenuMapper.deleteRoleMenu(roleId);
     }
 }

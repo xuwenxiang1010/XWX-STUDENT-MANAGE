@@ -89,6 +89,7 @@ export default {
         pageList: "/system/file/pageList",
         update: "/system/file/update",
         remove: "/system/file/delete/",
+        download: "/system/file/download/",
       },
     }
   },
@@ -122,7 +123,7 @@ export default {
     },
     remove(id){
       this.request.post(this.url.remove + id).then(res =>{
-        if (res){
+        if (res.code === '200'){
           this.$message.success("删除成功")
           this.load()
         }else {
@@ -131,7 +132,9 @@ export default {
       })
     },
     download(row){
-      window.open(row.url)
+
+          window.open(row.url)
+
     },
     changeStatus(row){
       this.request.post(this.url.update,row).then(res => {

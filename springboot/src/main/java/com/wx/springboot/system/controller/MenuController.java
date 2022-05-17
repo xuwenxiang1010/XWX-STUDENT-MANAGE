@@ -3,6 +3,9 @@ package com.wx.springboot.system.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wx.springboot.system.common.vo.Result;
+import com.wx.springboot.system.dao.DictDao;
+import com.wx.springboot.system.domain.dto.DictDto;
+import com.wx.springboot.system.domain.entity.Dict;
 import com.wx.springboot.system.domain.entity.Menu;
 import com.wx.springboot.system.service.DictService;
 import com.wx.springboot.system.service.MenuService;
@@ -27,7 +30,7 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
     @Autowired
-    private DictService dictService;
+    private DictDao dictMapper;
 
     @GetMapping("/pageList")
     @ApiOperation(value = "分页查询")
@@ -64,8 +67,8 @@ public class MenuController {
 
     @GetMapping("/icons")
     private Result getIcons(){
-        Result result = dictService.getIconList();
-        return Result.success(result);
+        List<DictDto> list = dictMapper.queryValueByCode("icon");
+        return Result.success(list);
     }
 
     @GetMapping("/ids")
