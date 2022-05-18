@@ -62,7 +62,7 @@
     <el-dialog title="新增图书" :visible.sync="dialogAdd" width="30%">
       <el-form label-width="70px">
         <el-form-item label="图书编号">
-          <el-input v-model="getbefor.bookCode" autocomplete="off"></el-input>
+          <el-input v-model="bookCode" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
@@ -148,6 +148,7 @@
                     add: "/books/records/add",
                     update: "/books/records/update",
                     remove: "/books/records/delete/",
+                    getCode:"/books/records/getCode"
                 },
                 props:{
                     label : 'name',
@@ -187,9 +188,10 @@
             },
             handleAdd(){
                 this.dialogAdd = true
-                this.form = {
-
-                }
+                this.form = {},
+                    this.request.get(this.url.getCode).then(res => {
+                        this.bookCode = res.bookCode
+                    })
             },
             handleEdit(row){
                 this.dialogEdit = true

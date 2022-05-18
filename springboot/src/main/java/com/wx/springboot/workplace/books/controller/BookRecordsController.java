@@ -35,7 +35,12 @@ public class BookRecordsController {
     }
 
     @PostMapping("/add")
-    public  Result add(@RequestBody BookRecords bookRecords){
+    public Result add(@RequestBody BookRecords bookRecords){
         return bookRecordsService.add(bookRecords);
+    }
+
+    @GetMapping("/getCode")
+    public String getCode(){
+        return bookRecordsService.getCode();
     }
 }

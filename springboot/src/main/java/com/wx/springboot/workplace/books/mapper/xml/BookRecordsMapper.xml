@@ -3,4 +3,9 @@
 
 <mapper namespace="com.wx.springboot.workplace.books.mapper.BookRecordsMapper">
 
+    <select id="findMaxCode" parameterType="string" resultType="java.lang.String">
+        select MAX(book_code)
+        from book_records
+        where book_code like concat('%', #{prefix}, '%')
+    </select>
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -56,5 +57,21 @@ public class BookRecordsServiceImpl implements BookRecordsService {
             bookRecordsMapper.insert(bookRecords);
             return Result.success("添加成功");
         }
+    }
+
+    @Override
+    public String getCode() {
+        String prefix = "ZGTS" + new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String goodsCode = findMaxCode(prefix);
+        if (StringUtils.isBlank(goodsCode)) {
+            return prefix+"001";
+        }
+        String sum = goodsCode.substring(goodsCode.length() - 3);
+        String code = String.format("%03d", Integer.parseInt(sum) + 1);
+        return prefix+code;
+    }
+
+    private String findMaxCode(String prefix) {
+        return bookRecordsMapper.findMaxCode(prefix);
     }
 }

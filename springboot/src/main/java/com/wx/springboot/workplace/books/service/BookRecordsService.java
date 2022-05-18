@@ -24,4 +24,10 @@ public interface BookRecordsService{
      * @return
      */
     Result add(BookRecords bookRecords);
+
+    /**
+     * 获取图书编码
+     * @return
+     */
+    String getCode();
 }
