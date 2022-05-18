@@ -7,7 +7,7 @@
     </select>
 
     <select id="queryValueByCode" resultType="com.wx.springboot.system.domain.dto.DictDto">
-        SELECT i.code,i.text,i.`value`
+        SELECT i.*
         FROM sys_dict d
             LEFT JOIN sys_dict_item i ON d.code = i.code
         WHERE d.code = #{code}

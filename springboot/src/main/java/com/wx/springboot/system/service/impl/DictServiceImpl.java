@@ -93,4 +93,15 @@ public class DictServiceImpl implements DictService {
         return Result.success();
     }
 
+    @Override
+    public Result updateItem(DictItem item) {
+        int count = itemMapper.getByText(item.getCode(),item.getText());
+        if (count>1){
+            return Result.error(Constants.CODE_400,"字典名称已存在！");
+        }else {
+            int i = itemMapper.updateById(item);
+            return Result.success();
+        }
+    }
+
 }

@@ -26,4 +26,6 @@ public interface DictService {
     Result queryValueByCode(String code);
 
     Result addItem(DictItem item);
+
+    Result updateItem(DictItem item);
 }

@@ -1,5 +1,6 @@
 package com.wx.springboot.system.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -8,7 +9,9 @@ import lombok.Data;
  * @description:
  */
 @Data
+@TableName("sys_dict_item")
 public class DictItem {
+	private Long id;
 	private String code;
 	private String text;
 	private String value;
