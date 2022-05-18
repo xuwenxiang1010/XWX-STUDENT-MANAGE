@@ -16,7 +16,6 @@ import lombok.Data;
 public class Dict {
     @TableId(type = IdType.AUTO)
     private Long id;
-    private String name;
-    private String value;
-    private String type;
+    private String code;
+    private String description;
 }
