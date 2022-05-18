@@ -18,4 +18,5 @@ public class Dict {
     private Long id;
     private String code;
     private String description;
+    private Integer status;
 }

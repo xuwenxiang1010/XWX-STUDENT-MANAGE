@@ -3,7 +3,9 @@ package com.wx.springboot.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wx.springboot.system.domain.entity.Dict;
+import com.wx.springboot.system.domain.entity.DictItem;
 import com.wx.springboot.system.service.DictService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/system/dict")
+@Api(tags = "DictController")
 public class DictController {
     @Autowired
     private DictService dictService;
@@ -64,10 +67,16 @@ public class DictController {
     }
 
     @PostMapping("/getItem/{code}")
-	@ApiOperation(value = "根据索引获取字典值")
+	@ApiOperation(value = "根据索引获取所对应的所有字典值")
 	public Result queryValueByCode(@PathVariable String code){
     	Result result = dictService.queryValueByCode(code);
     	return result;
 	}
 
+	@PostMapping("/addItem")
+	@ApiOperation(value = "增加字典值")
+	public Result addItemByCode(@RequestBody DictItem item){
+    	Result result = dictService.addItem(item);
+    	return result;
+	}
 }
