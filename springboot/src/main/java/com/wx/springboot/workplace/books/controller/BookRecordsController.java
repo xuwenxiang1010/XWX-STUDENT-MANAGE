@@ -9,10 +9,7 @@ import com.wx.springboot.workplace.books.service.BookRecordsService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -29,11 +26,16 @@ public class BookRecordsController {
     private BookRecordsService bookRecordsService;
 
     @GetMapping("/list")
-    public Result queryPageList(BookRecordsVo vo,
+    public Result list(BookRecordsVo vo,
                                 @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         IPage<BookRecords> page = new Page<>(pageNo, pageSize);
         IPage<BookRecords> pageList = bookRecordsService.queryPageList(page, vo);
         return Result.success(pageList);
+    }
+
+    @PostMapping("/add")
+    public  Result add(@RequestBody BookRecords bookRecords){
+        return bookRecordsService.add(bookRecords);
     }
 }

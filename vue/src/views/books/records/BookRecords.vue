@@ -2,6 +2,9 @@
   <div>
     <div style="margin: 10px 0">
       <el-form :inline="true" :model="filters" ref="filters">
+        <el-form-item prop="bookCode">
+          <el-input v-model="filters.bookCode" style="width: 150px" placeholder="请输入图书编号" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
+        </el-form-item>
         <el-form-item prop="roleName">
           <el-input v-model="filters.bookCode" style="width: 150px" placeholder="请输入图书编号" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
         </el-form-item>
@@ -144,7 +147,7 @@
                     list: "/books/records/list",
                     add: "/books/records/add",
                     update: "/books/records/update",
-                    remove: "/books/records/delete/"
+                    remove: "/books/records/delete/",
                 },
                 props:{
                     label : 'name',
@@ -184,7 +187,9 @@
             },
             handleAdd(){
                 this.dialogAdd = true
-                this.form = {}
+                this.form = {
+
+                }
             },
             handleEdit(row){
                 this.dialogEdit = true

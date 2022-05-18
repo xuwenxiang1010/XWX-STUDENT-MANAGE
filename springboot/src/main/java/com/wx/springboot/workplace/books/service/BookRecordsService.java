@@ -1,6 +1,7 @@
 package com.wx.springboot.workplace.books.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.workplace.books.dto.BookRecordsVo;
 import com.wx.springboot.workplace.books.entity.BookRecords;
 
@@ -16,4 +17,11 @@ public interface BookRecordsService{
      * @return
      */
     IPage<BookRecords> queryPageList(IPage<BookRecords> page, BookRecordsVo vo);
+
+    /**
+     * 添加
+     * @param bookRecords
+     * @return
+     */
+    Result add(BookRecords bookRecords);
 }
