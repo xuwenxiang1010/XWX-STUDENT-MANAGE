@@ -1,4 +1,4 @@
-package com.wx.springboot.tools.getusername;
+package com.wx.springboot.system.common.tools.getusername;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

@@ -1,4 +1,4 @@
-package com.wx.springboot.tools.gettoken;
+package com.wx.springboot.system.common.tools.gettoken;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;

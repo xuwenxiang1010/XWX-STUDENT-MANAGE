@@ -1,4 +1,4 @@
-package com.wx.springboot.tools.gettoken;
+package com.wx.springboot.system.common.tools.gettoken;
 
 import lombok.extern.slf4j.Slf4j;
 /**

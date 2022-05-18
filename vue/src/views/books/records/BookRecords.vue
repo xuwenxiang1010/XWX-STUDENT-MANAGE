@@ -6,7 +6,7 @@
           <el-input v-model="filters.bookCode" style="width: 150px" placeholder="请输入图书编号" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
         </el-form-item>
         <el-form-item prop="roleName">
-          <el-input v-model="filters.bookCode" style="width: 150px" placeholder="请输入图书编号" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
+          <el-input v-model="filters.bookName" style="width: 150px" placeholder="请输入图" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="ml-5" @click="load" icon="el-icon-search">搜索</el-button>
@@ -62,7 +62,7 @@
     <el-dialog title="新增图书" :visible.sync="dialogAdd" width="30%">
       <el-form label-width="70px">
         <el-form-item label="图书编号">
-          <el-input v-model="bookCode" autocomplete="off"></el-input>
+          <el-input v-model="bookCode" autocomplete="off" readonly></el-input>
         </el-form-item>
         <el-form-item label="图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
@@ -92,7 +92,7 @@
     <el-dialog title="编辑图书" :visible.sync="dialogEdit" width="30%">
       <el-form label-width="70px">
         <el-form-item label="图书编号">
-        <el-input v-model="form.bookCode" autocomplete="off"></el-input>
+        <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
       </el-form-item>
         <el-form-item label="图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
@@ -166,7 +166,10 @@
                     params: {
                         pageNum: this.pageNum,
                         pageSize: this.pageSize,
-                        bookCode: this.filters.bookCode
+                        bookCode: this.filters.bookCode,
+                        bookName:this.filters.bookName,
+                        bookNature:this.filters.bookNature,
+                        book
                     }
                 }).then(res=>{
                     this.tableData = res.data.records
