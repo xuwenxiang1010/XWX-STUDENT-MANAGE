@@ -89,9 +89,10 @@
 
     <el-dialog title="字典值" :visible.sync="dialogItem" width="40%">
       <el-table :data="items">
-        <el-table-column prop="text" align="center" label="名称" width="150"></el-table-column>
-        <el-table-column prop="value" align="center" label="值" width="200"></el-table-column>
-        <el-table-column align="center" label="操作" min-width="60px">
+        <el-table-column prop="code" align="center" label="索引"></el-table-column>
+        <el-table-column prop="text" align="center" label="名称"></el-table-column>
+        <el-table-column prop="value" align="center" label="值"></el-table-column>
+        <el-table-column align="center" label="操作" min-width="70px">
           <template slot-scope="scope">
             <el-button type="text" icon="el-icon-edit" @click="editItem(scope.row)">编辑</el-button>
             <el-popconfirm
@@ -116,6 +117,9 @@
     </el-dialog>
     <el-dialog title="新增字典" :visible.sync="dialogItemAdd" width="30%">
       <el-form label-width="70px">
+        <el-form-item label="索引值">
+          <el-input v-model="this.itemCode" disabled autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="字典名称">
           <el-input v-model="formItem.text" autocomplete="off"></el-input>
         </el-form-item>
@@ -124,12 +128,15 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="">取 消</el-button>
-        <el-button type="primary" >确 定</el-button>
+        <el-button>取 消</el-button>
+        <el-button type="primary" @click="saveItem">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="编辑字典" :visible.sync="dialogItemEdit" width="30%">
       <el-form label-width="70px">
+        <el-form-item label="索引值">
+          <el-input v-model="formItem.code" disabled autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="字典名称">
           <el-input v-model="formItem.text" autocomplete="off"></el-input>
         </el-form-item>
@@ -139,7 +146,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button >取 消</el-button>
-        <el-button type="primary" >确 定</el-button>
+        <el-button type="primary" @click="updateItem()">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -164,7 +171,7 @@ export default {
       dialogItemEdit: false,
       tableData: [],
       items: [],
-
+      itemCode: "",
       total: 0,
       pageNum: 1,
       pageSize: 5,
@@ -176,7 +183,8 @@ export default {
         update: "/system/dict/update",
         remove: "/system/dict/delete/",
         getItem: "/system/dict/getItem/",
-        addItem: "/system/dict/addItem"
+        addItem: "/system/dict/addItem",
+        updateItem: "/system/dict/updateItem"
       },
     }
   },
@@ -192,7 +200,6 @@ export default {
           code: this.filters.code
         }
       }).then(res=>{
-        console.log(res)
         this.tableData = res.data.records
         this.total = res.data.total
       })
@@ -255,16 +262,14 @@ export default {
       })
     },
 
-    /* todo:新增字典、编辑字典、删除字典方法
+    /* todo:编辑字典、删除字典方法
     */
     genItem(code){
       this.request.post(this.url.getItem + code).then(res => {
         if (res.code === '200'){
-
           this.dialogItem = true
           this.items = res.data
-          this.formItem.itemCode = code
-          console.log(code)
+          this.itemCode = code
         }
       })
     },
@@ -275,7 +280,34 @@ export default {
     editItem(row){
       this.dialogItemEdit = true
       this.formItem = row
-    }
+    },
+    saveItem(){
+      this.formItem.code = this.itemCode
+      this.request.post(this.url.addItem,this.formItem).then(res => {
+        if (res.code === '200'){
+          this.$message.success("新增成功")
+          this.dialogItemAdd = false
+          this.dialogItem = false
+          this.load()
+        }else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    updateItem(){
+      this.request.post(this.url.updateItem,this.formItem).then(res => {
+        if (res.code === '200'){
+          this.$message.success("编辑成功")
+          this.dialogItemEdit = false
+          this.dialogItem = false
+        }else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    removeItem(id){
+
+    },
 
   }
 }

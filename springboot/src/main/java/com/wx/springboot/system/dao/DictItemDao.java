@@ -11,4 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface DictItemDao extends BaseMapper<DictItem> {
+	int getByText(String code, String text);
 }
