@@ -79,4 +79,6 @@ public class DictController {
     	Result result = dictService.addItem(item);
     	return result;
 	}
+
+	//todo:新增字典、编辑字典、删除字典方法
 }

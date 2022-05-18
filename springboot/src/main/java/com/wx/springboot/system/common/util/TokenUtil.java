@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class TokenUtil {
 
-	private static final long EXPIRE_TIME = 5 * 60 * 1000;
+	private static final long EXPIRE_TIME = 60 * 60 * 1000;
 
 	public static  String genToken(String userId,String sign){
 		Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);

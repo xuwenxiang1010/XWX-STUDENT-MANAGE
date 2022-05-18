@@ -7,17 +7,16 @@
     </select>
 
     <select id="queryValueByCode" resultType="com.wx.springboot.system.domain.dto.DictDto">
-        SELECT d.code,d.description,i.text,i.`value`
+        SELECT i.code,i.text,i.`value`
         FROM sys_dict d
-             LEFT JOIN sys_dict_item i ON d.code = i.code
+            LEFT JOIN sys_dict_item i ON d.code = i.code
         WHERE d.code = #{code}
     </select>
 
     <select id="getItemQuantity" resultType="int">
         SELECT count(*)
-        FROM sys_dict d
-                 LEFT JOIN sys_dict_item i ON d.code = i.code
-        WHERE d.code = #{code}
+        FROM sys_dict_item i
+        WHERE i.code = #{code}
     </select>
 
 
