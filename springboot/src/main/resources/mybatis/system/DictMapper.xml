@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wx.springboot.system.dao.DictDao">
+
     <select id="list" resultType="com.wx.springboot.system.domain.entity.Dict">
         select * from sys_dict
     </select>
+
     <select id="queryValueByCode" resultType="com.wx.springboot.system.domain.dto.DictDto">
-        SELECT d.code,d.description,i.text,i.`value`
+        SELECT i.code,i.text,i.`value`
         FROM sys_dict d
-             LEFT JOIN sys_dict_item i ON d.code = i.code
+            LEFT JOIN sys_dict_item i ON d.code = i.code
         WHERE d.code = #{code}
     </select>
+
+    <select id="getItemQuantity" resultType="int">
+        SELECT count(*)
+        FROM sys_dict_item i
+        WHERE i.code = #{code}
+    </select>
+
+
 </mapper>

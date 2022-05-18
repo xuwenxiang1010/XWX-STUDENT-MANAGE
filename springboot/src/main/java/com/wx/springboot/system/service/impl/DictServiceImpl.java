@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wx.springboot.system.common.vo.Constants;
 import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.system.dao.DictDao;
+import com.wx.springboot.system.dao.DictItemDao;
 import com.wx.springboot.system.domain.dto.DictDto;
 import com.wx.springboot.system.domain.entity.Dict;
+import com.wx.springboot.system.domain.entity.DictItem;
 import com.wx.springboot.system.service.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class DictServiceImpl implements DictService {
 
     @Autowired
     private DictDao dictMapper;
+    @Autowired
+    private DictItemDao itemMapper;
 
     @Override
     public List<Dict> list() {
@@ -33,24 +37,42 @@ public class DictServiceImpl implements DictService {
     @Override
     public IPage<Dict> pageList(IPage<Dict> page, Dict dict) {
         LambdaQueryWrapper<Dict> query = new LambdaQueryWrapper<>();
-        query.like(Dict::getCode,dict.getCode());
+        query.eq(Dict::getStatus,0)
+            .like(Dict::getCode,dict.getCode());
         IPage<Dict> pageList = dictMapper.selectPage(page, query);
         return pageList;
     }
 
     @Override
     public Result add(Dict dict) {
-        return null;
+        LambdaQueryWrapper<Dict> query = new LambdaQueryWrapper<>();
+        query.eq(Dict::getCode,dict.getCode());
+        Dict dict1 = dictMapper.selectOne(query);
+        if (dict1 != null){
+            return Result.error(Constants.CODE_400,"索引已存在！");
+        }else {
+            dictMapper.insert(dict);
+            return Result.success();
+        }
     }
 
     @Override
     public Result deleted(Long id) {
-        return null;
+        Dict dict = dictMapper.selectById(id);
+        int quantity = dictMapper.getItemQuantity(dict.getCode());
+        if (quantity != 0){
+            return Result.error(Constants.CODE_500,"索引有字典值，删除失败！");
+        }else {
+            dict.setStatus(1);
+            dictMapper.updateById(dict);
+            return Result.success();
+        }
     }
 
     @Override
     public Result update(Dict dict) {
-        return null;
+        dictMapper.updateById(dict);
+        return Result.success();
     }
 
     @Override
@@ -58,4 +80,17 @@ public class DictServiceImpl implements DictService {
         List<DictDto> dictItems = dictMapper.queryValueByCode(code);
         return Result.success(dictItems);
     }
+
+    @Override
+    public Result addItem(DictItem item) {
+        List<DictDto> dictDtos = dictMapper.queryValueByCode(item.getCode());
+        for (DictDto dto : dictDtos){
+            if (dto.getText().equals(item.getText())){
+                return Result.error(Constants.CODE_400,"字典名称已存在！");
+            }
+        }
+        int addItem = itemMapper.insert(item);
+        return Result.success();
+    }
+
 }

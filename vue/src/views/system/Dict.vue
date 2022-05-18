@@ -72,34 +72,6 @@
         <el-button type="primary" @click="save">确 定</el-button>
       </div>
     </el-dialog>
-
-    <el-dialog title="字典值" :visible.sync="dialogItem" width="40%">
-      <el-table :data="items">
-        <el-table-column prop="text" align="center" label="名称" width="150"></el-table-column>
-        <el-table-column prop="value" align="center" label="值" width="200"></el-table-column>
-        <el-table-column align="center" label="操作" min-width="60px">
-          <template>
-            <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm
-              class="ml-5"
-              confirm-button-text='确定'
-              cancel-button-text='取消'
-              icon="el-icon-info"
-              icon-color="red"
-              title="确定删除吗？"
-              @confirm="remove(scope.row.id)"
-            >
-              <el-button type="text" icon="el-icon-delete" slot="reference">删除</el-button>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogItem = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
-      </div>
-    </el-dialog>
-
     <el-dialog title="编辑索引" :visible.sync="dialogEdit" width="30%">
       <el-form label-width="70px">
         <el-form-item label="索引">
@@ -114,6 +86,63 @@
         <el-button type="primary" @click="update">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="字典值" :visible.sync="dialogItem" width="40%">
+      <el-table :data="items">
+        <el-table-column prop="text" align="center" label="名称" width="150"></el-table-column>
+        <el-table-column prop="value" align="center" label="值" width="200"></el-table-column>
+        <el-table-column align="center" label="操作" min-width="60px">
+          <template slot-scope="scope">
+            <el-button type="text" icon="el-icon-edit" @click="editItem(scope.row)">编辑</el-button>
+            <el-popconfirm
+              class="ml-5"
+              confirm-button-text='确定'
+              cancel-button-text='取消'
+              icon="el-icon-info"
+              icon-color="red"
+              title="确定删除吗？"
+              @confirm="removeItem(scope.row.id)"
+            >
+              <el-button type="text" icon="el-icon-delete" slot="reference">删除</el-button>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addItem()">新增</el-button>
+        <el-button >取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="新增字典" :visible.sync="dialogItemAdd" width="30%">
+      <el-form label-width="70px">
+        <el-form-item label="字典名称">
+          <el-input v-model="formItem.text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="字典值">
+          <el-input v-model="formItem.value" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="">取 消</el-button>
+        <el-button type="primary" >确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="编辑字典" :visible.sync="dialogItemEdit" width="30%">
+      <el-form label-width="70px">
+        <el-form-item label="字典名称">
+          <el-input v-model="formItem.text" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="字典值">
+          <el-input v-model="formItem.value" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button >取 消</el-button>
+        <el-button type="primary" >确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -127,11 +156,15 @@ export default {
         code: ""
       },
       form:{},
+      formItem:{},
       dialogAdd: false,
       dialogEdit: false,
       dialogItem: false,
+      dialogItemAdd: false,
+      dialogItemEdit: false,
       tableData: [],
       items: [],
+
       total: 0,
       pageNum: 1,
       pageSize: 5,
@@ -139,10 +172,11 @@ export default {
       headerBG: 'headerBG',
       url: {
         pageList: "/system/dict/pageList",
-        getItem: "/system/dict/getItem/",
         add: "/system/dict/add",
         update: "/system/dict/update",
-        remove: "/system/dict/delete/"
+        remove: "/system/dict/delete/",
+        getItem: "/system/dict/getItem/",
+        addItem: "/system/dict/addItem"
       },
     }
   },
@@ -220,30 +254,29 @@ export default {
         }
       })
     },
+
+    /* todo:新增字典、编辑字典、删除字典方法
+    */
     genItem(code){
       this.request.post(this.url.getItem + code).then(res => {
         if (res.code === '200'){
-          console.log(res)
+
           this.dialogItem = true
           this.items = res.data
+          this.formItem.itemCode = code
+          console.log(code)
         }
       })
     },
-    batchRemove(){
-      let ids = this.multipleSelection.map(v => v.id)
-      if(ids.length == 0){
-        this.$message.error("无数据")
-      }else {
-        this.request.post(this.url.batchRemove,ids).then(res =>{
-          if (res){
-            this.$message.success("批量删除成功")
-            this.load()
-          }else {
-            this.$message.error("批量删除失败")
-          }
-        })
-      }
+    addItem(){
+      this.dialogItemAdd = true
+      this.formItem = {}
     },
+    editItem(row){
+      this.dialogItemEdit = true
+      this.formItem = row
+    }
+
   }
 }
 </script>

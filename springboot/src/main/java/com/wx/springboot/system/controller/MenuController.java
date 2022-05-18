@@ -2,6 +2,7 @@ package com.wx.springboot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wx.springboot.system.common.vo.Constants;
 import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.system.dao.DictDao;
 import com.wx.springboot.system.domain.dto.DictDto;
@@ -67,7 +68,7 @@ public class MenuController {
 
     @GetMapping("/icons")
     private Result getIcons(){
-        List<DictDto> list = dictMapper.queryValueByCode("icon");
+        List<DictDto> list = dictMapper.queryValueByCode(Constants.DICT_TYPE_ICON);
         return Result.success(list);
     }
 
