@@ -53,6 +53,9 @@ public class BookRecords {
     @TableField(exist = false)
     private String categoryName;
 
+    @TableField(exist = false)
+    private String position;
+
     public String getNatureName() {
         return NatureEnum.valueByCode(getBookNature());
     }

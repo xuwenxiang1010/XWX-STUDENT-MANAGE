@@ -7,8 +7,9 @@ import org.apache.commons.lang.StringUtils;
  */
 
 public enum NatureEnum {
-        BUZ_CODE_YCL(1, "原材料"),
-        BUZ_CODE_SP(2, "商品"),
+        儿童(1, "儿童读物"),
+        成人(2, "成人读物"),
+        R18(3, "R18读物"),
         ;
 
         private Integer code;
