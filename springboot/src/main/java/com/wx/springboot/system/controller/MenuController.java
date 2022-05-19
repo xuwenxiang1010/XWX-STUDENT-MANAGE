@@ -7,6 +7,7 @@ import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.system.dao.DictDao;
 import com.wx.springboot.system.domain.dto.DictDto;
 import com.wx.springboot.system.domain.entity.Dict;
+import com.wx.springboot.system.domain.entity.DictItem;
 import com.wx.springboot.system.domain.entity.Menu;
 import com.wx.springboot.system.service.DictService;
 import com.wx.springboot.system.service.MenuService;
@@ -68,7 +69,7 @@ public class MenuController {
 
     @GetMapping("/icons")
     private Result getIcons(){
-        List<DictDto> list = dictMapper.queryValueByCode(Constants.DICT_TYPE_ICON);
+        List<DictItem> list = dictMapper.queryValueByCode(Constants.DICT_TYPE_ICON);
         return Result.success(list);
     }
 

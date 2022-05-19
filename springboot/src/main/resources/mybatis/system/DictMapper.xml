@@ -6,11 +6,10 @@
         select * from sys_dict
     </select>
 
-    <select id="queryValueByCode" resultType="com.wx.springboot.system.domain.dto.DictDto">
+    <select id="queryValueByCode" resultType="com.wx.springboot.system.domain.entity.DictItem">
         SELECT i.*
-        FROM sys_dict d
-            LEFT JOIN sys_dict_item i ON d.code = i.code
-        WHERE d.code = #{code}
+        FROM sys_dict_item i
+        WHERE i.code = #{code}
     </select>
 
     <select id="getItemQuantity" resultType="int">
@@ -18,6 +17,5 @@
         FROM sys_dict_item i
         WHERE i.code = #{code}
     </select>
-
 
 </mapper>

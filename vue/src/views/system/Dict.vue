@@ -89,7 +89,6 @@
 
     <el-dialog title="字典值" :visible.sync="dialogItem" width="40%">
       <el-table :data="items">
-        <el-table-column prop="code" align="center" label="索引"></el-table-column>
         <el-table-column prop="text" align="center" label="名称"></el-table-column>
         <el-table-column prop="value" align="center" label="值"></el-table-column>
         <el-table-column align="center" label="操作" min-width="70px">
@@ -111,8 +110,7 @@
       </el-table>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="addItem()">新增</el-button>
-        <el-button >取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="closeItem()">关闭</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增字典" :visible.sync="dialogItemAdd" width="30%">
@@ -128,15 +126,12 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
-        <el-button type="primary" @click="saveItem">确 定</el-button>
+        <el-button @click="closeAdd()">取消</el-button>
+        <el-button type="primary" @click="saveItem">确定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="编辑字典" :visible.sync="dialogItemEdit" width="30%">
       <el-form label-width="70px">
-        <el-form-item label="索引值">
-          <el-input v-model="formItem.code" disabled autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="字典名称">
           <el-input v-model="formItem.text" autocomplete="off"></el-input>
         </el-form-item>
@@ -145,8 +140,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button >取 消</el-button>
-        <el-button type="primary" @click="updateItem()">确 定</el-button>
+        <el-button @click="closeEdit()">取消</el-button>
+        <el-button type="primary" @click="updateItem()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -182,9 +177,11 @@ export default {
         add: "/system/dict/add",
         update: "/system/dict/update",
         remove: "/system/dict/delete/",
+
         getItem: "/system/dict/getItem/",
         addItem: "/system/dict/addItem",
-        updateItem: "/system/dict/updateItem"
+        updateItem: "/system/dict/updateItem",
+        removeItem: "/system/dict/deleteItem/"
       },
     }
   },
@@ -238,7 +235,7 @@ export default {
     },
     update(){
       this.request.post(this.url.update,this.form).then(res =>{
-        if (res){
+        if (res.code === '200'){
           this.$message.success("编辑成功")
           this.dialogEdit = false
           this.load()
@@ -253,7 +250,7 @@ export default {
     },
     remove(id){
       this.request.post(this.url.remove + id).then(res =>{
-        if (res){
+        if (res.code === '200'){
           this.$message.success("删除成功")
           this.load()
         }else {
@@ -262,11 +259,10 @@ export default {
       })
     },
 
-    /* todo:编辑字典、删除字典方法
-    */
     genItem(code){
       this.request.post(this.url.getItem + code).then(res => {
         if (res.code === '200'){
+          console.log(res)
           this.dialogItem = true
           this.items = res.data
           this.itemCode = code
@@ -306,8 +302,29 @@ export default {
       })
     },
     removeItem(id){
-
+      this.request.post(this.url.removeItem + id).then(res => {
+        if (res.code === '200'){
+          this.$message.success("删除成功")
+          this.dialogItem = false
+          this.load()
+        }
+      })
     },
+    closeItem(){
+      this.dialogItem = false
+      this.load()
+    },
+    closeAdd(){
+      this.dialogItemAdd = false
+      this.closeItem()
+      this.load()
+    },
+    closeEdit(){
+      this.dialogItemEdit = false
+      this.closeItem()
+      this.load()
+    }
+
 
   }
 }
