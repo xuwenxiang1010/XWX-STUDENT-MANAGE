@@ -2,18 +2,21 @@ package com.wx.springboot.workplace.books.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wx.springboot.system.common.tools.getuuid.GetUUId;
 import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.workplace.books.entity.Libraries;
 import com.wx.springboot.workplace.books.service.LibrariesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author wyb
  */
 @RestController
-@RequestMapping("/books/libraries")
+@RequestMapping("books/libraries")
 public class LibrariesController {
 
+    @Autowired
     private LibrariesService librariesService;
 
 
@@ -27,10 +30,11 @@ public class LibrariesController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody Libraries libraries){
+    public Result add(Libraries libraries){
         if (libraries!=null){
+            libraries.setId(GetUUId.getUUID());
             librariesService.add(libraries);
-            librariesService.roomName(libraries.getFlower(),libraries.getRoom(),libraries.getName());
+            librariesService.roomName(libraries.getFlower(),libraries.getRoom(),libraries.getId());
             return Result.success();
         }
         return Result.error();

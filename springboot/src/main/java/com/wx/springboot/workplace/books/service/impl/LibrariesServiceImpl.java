@@ -1,9 +1,9 @@
 package com.wx.springboot.workplace.books.service.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.wx.springboot.system.common.tools.gettoken.GetToken;
-import com.wx.springboot.system.common.tools.getusername.GetUserName;
+import com.wx.springboot.system.common.tools.getuuid.GetUUId;
 import com.wx.springboot.system.common.vo.Constants;
 import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.workplace.books.entity.Libraries;
@@ -11,8 +11,6 @@ import com.wx.springboot.workplace.books.mapper.LibrariesMapper;
 import com.wx.springboot.workplace.books.service.LibrariesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -28,6 +26,7 @@ public class LibrariesServiceImpl implements LibrariesService {
     public IPage<Libraries> queryPageList(IPage<Libraries> page, Libraries vo) {
         LambdaQueryWrapper<Libraries> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Libraries::getDeleted,0)
+                .eq(Libraries::getFatherId,"0")
                 .orderByDesc(Libraries::getCreateTime);
         return librariesMapper.selectPage(page,queryWrapper);
     }
@@ -35,7 +34,7 @@ public class LibrariesServiceImpl implements LibrariesService {
     @Override
     public Result add(Libraries libraries) {
         libraries.setCreateTime(new Date());
-        libraries.setFatherId(0);
+        libraries.setFatherId("0");
         LambdaQueryWrapper<Libraries> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Libraries::getName,libraries.getName())
                 .eq(Libraries::getDeleted,0);
@@ -49,15 +48,16 @@ public class LibrariesServiceImpl implements LibrariesService {
     }
 
     @Override
-    public Result roomName(Integer flower, Integer room, String name){
+    public Result roomName(Integer flower, Integer room, String id){
         if (flower != 0 && room != 0){
             for (int i = 1;  i<=flower; i++){
-                String name1 = String.valueOf(flower);
+                String name1 = String.valueOf(i);
                 for (int j = 1; j<=room;j++){
-                    String name2 = String.valueOf(room);
+                    String name2 = String.valueOf(j);
                     Libraries lib = new Libraries();
-                    lib.setFatherId(librariesMapper.selectIdByName(name));
-                    lib.setName(name1+"0"+name2);
+                    lib.setId(GetUUId.getUUID());
+                    lib.setFatherId(id);
+                    lib.setName(name1+"0"+name2+"室");
                     lib.setCreateTime(new Date());
                     librariesMapper.insert(lib);
                 }

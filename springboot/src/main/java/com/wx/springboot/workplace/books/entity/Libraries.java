@@ -14,10 +14,10 @@ import java.util.Date;
 @Data
 @TableName(value = "book_libraries")
 public class Libraries {
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+    @TableId(type = IdType.INPUT)
+    private String id;
 
-    private Integer fatherId;
+    private String fatherId;
 
     private String name;
 

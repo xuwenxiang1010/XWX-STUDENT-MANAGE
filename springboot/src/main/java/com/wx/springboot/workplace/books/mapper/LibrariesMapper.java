@@ -9,5 +9,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface LibrariesMapper extends BaseMapper<Libraries> {
+    /**
+     * 通过name查找ID
+     * @param name
+     * @return
+     */
     Integer selectIdByName(String name);
 }
