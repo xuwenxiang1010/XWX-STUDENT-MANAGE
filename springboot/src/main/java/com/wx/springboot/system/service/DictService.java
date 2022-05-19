@@ -28,4 +28,6 @@ public interface DictService {
     Result addItem(DictItem item);
 
     Result updateItem(DictItem item);
+
+    Result deleteItem(Long itemId);
 }

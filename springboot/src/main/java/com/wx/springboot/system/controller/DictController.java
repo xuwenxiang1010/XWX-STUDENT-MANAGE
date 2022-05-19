@@ -80,11 +80,17 @@ public class DictController {
     	return result;
 	}
 
-	//todo:编辑字典、删除字典方法
 	@PostMapping("/updateItem")
 	@ApiOperation(value = "修改字典值")
 	public Result updateItem(@RequestBody DictItem item){
     	Result result = dictService.updateItem(item);
+    	return result;
+	}
+
+	@PostMapping("/deleteItem/{itemId}")
+	@ApiOperation(value = "删除字典值")
+	public Result deleteItem(@PathVariable Long itemId){
+    	Result result = dictService.deleteItem(itemId);
     	return result;
 	}
 }

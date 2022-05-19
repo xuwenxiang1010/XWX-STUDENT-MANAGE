@@ -77,20 +77,22 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public Result queryValueByCode(String code) {
-        List<DictDto> dictItems = dictMapper.queryValueByCode(code);
+        List<DictItem> dictItems = dictMapper.queryValueByCode(code);
         return Result.success(dictItems);
     }
 
     @Override
     public Result addItem(DictItem item) {
-        List<DictDto> dictDtos = dictMapper.queryValueByCode(item.getCode());
-        for (DictDto dto : dictDtos){
-            if (dto.getText().equals(item.getText())){
-                return Result.error(Constants.CODE_400,"字典名称已存在！");
-            }
+        LambdaQueryWrapper<DictItem> query = new LambdaQueryWrapper<>();
+        query.eq(DictItem::getCode,item.getCode())
+                .eq(DictItem::getText,item.getText());
+        DictItem dictItem = itemMapper.selectOne(query);
+        if(dictItem != null){
+            return Result.error(Constants.CODE_400,"字典名称已存在！");
+        }else {
+            int addItem = itemMapper.insert(item);
+            return Result.success();
         }
-        int addItem = itemMapper.insert(item);
-        return Result.success();
     }
 
     @Override
@@ -99,9 +101,15 @@ public class DictServiceImpl implements DictService {
         if (count>1){
             return Result.error(Constants.CODE_400,"字典名称已存在！");
         }else {
-            int i = itemMapper.updateById(item);
+            itemMapper.updateById(item);
             return Result.success();
         }
+    }
+
+    @Override
+    public Result deleteItem(Long itemId) {
+        itemMapper.deleteById(itemId);
+        return Result.success();
     }
 
 }

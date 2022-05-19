@@ -3,6 +3,7 @@ package com.wx.springboot.system.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wx.springboot.system.domain.dto.DictDto;
 import com.wx.springboot.system.domain.entity.Dict;
+import com.wx.springboot.system.domain.entity.DictItem;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface DictDao extends BaseMapper<Dict> {
 
-	List<DictDto> queryValueByCode(String code);
+	List<DictItem> queryValueByCode(String code);
 
 	List<Dict> list();
 
