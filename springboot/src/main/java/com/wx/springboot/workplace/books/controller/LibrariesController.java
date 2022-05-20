@@ -34,9 +34,11 @@ public class LibrariesController {
         if (libraries!=null){
             libraries.setId(GetUUId.getUUID());
             librariesService.add(libraries);
-            librariesService.roomName(libraries.getFlower(),libraries.getRoom(),libraries.getId());
-            return Result.success();
+            librariesService.roomName(libraries.getFlower(),libraries.getRoom(),libraries.getBookShelf(),libraries.getLayer(),libraries.getId());
+            return Result.success("添加成功");
         }
         return Result.error();
     }
+
+
 }

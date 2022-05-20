@@ -42,6 +42,8 @@ public class BookRecordsVo {
      */
     private String categoryName;
 
+    private String position;
+
     public String getNatureName() {
         return NatureEnum.valueByCode(getBookNature());
     }

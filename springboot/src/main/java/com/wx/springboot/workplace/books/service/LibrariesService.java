@@ -31,5 +31,7 @@ public interface LibrariesService {
      * @param id
      * @return
      */
-    Result roomName(Integer flower, Integer room, String id);
+    Result roomName(Integer flower, Integer room,Integer bookShelf,Integer layer, String id);
+
+    Libraries selectById(String positionId);
 }

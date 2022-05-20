@@ -30,4 +30,6 @@ public interface BookRecordsService{
      * @return
      */
     String getCode();
+
+    BookRecords selectById(String id);
 }

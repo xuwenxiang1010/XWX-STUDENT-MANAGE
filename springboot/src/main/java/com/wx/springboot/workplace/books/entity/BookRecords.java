@@ -3,8 +3,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.wx.springboot.workplace.books.controller.BookRecordsController;
+import com.wx.springboot.workplace.books.controller.LibrariesController;
 import com.wx.springboot.workplace.books.enums.CategoryEnum;
 import com.wx.springboot.workplace.books.enums.NatureEnum;
+import com.wx.springboot.workplace.books.service.impl.BookRecordsServiceImpl;
 import lombok.Data;
 
 import java.util.Date;
@@ -53,18 +56,9 @@ public class BookRecords {
     private String positionId;
 
     /**
-     * 图书创建人
-     */
-    private String createBy;
-
-    /**
      * 图书创建时间
      */
     private Date createTime;
-    /**
-     * 图书修改人
-     */
-    private String updateBy;
     /**
      * 图书修改时间
      */
@@ -78,6 +72,7 @@ public class BookRecords {
      */
     @TableField(exist = false)
     private String natureName;
+
     /**
      * 图书类别名称
      */
@@ -96,4 +91,5 @@ public class BookRecords {
     public String getCategoryName() {
         return CategoryEnum.valueByCode(getBookCategory());
     }
+
 }
