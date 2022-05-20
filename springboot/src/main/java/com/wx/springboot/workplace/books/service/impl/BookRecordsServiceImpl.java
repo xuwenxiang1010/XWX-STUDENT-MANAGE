@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wx.springboot.system.common.vo.Constants;
 import com.wx.springboot.system.common.vo.Result;
-import com.wx.springboot.system.common.tools.gettoken.GetToken;
-import com.wx.springboot.system.common.tools.getusername.GetUserName;
 import com.wx.springboot.workplace.books.dto.BookRecordsVo;
 import com.wx.springboot.workplace.books.entity.BookRecords;
 import com.wx.springboot.workplace.books.mapper.BookRecordsMapper;
@@ -13,8 +11,6 @@ import com.wx.springboot.workplace.books.service.BookRecordsService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,10 +37,7 @@ public class BookRecordsServiceImpl implements BookRecordsService {
 
     @Override
     public Result add(BookRecords bookRecords) {
-        HttpServletRequest request = GetUserName.getHttpServletRequest();
-        String userName = GetToken.getUserNameByToken(request);
         bookRecords.setCreateTime(new Date());
-        bookRecords.setCreateBy(userName);
         LambdaQueryWrapper<BookRecords> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(BookRecords::getBookName,bookRecords.getBookName())
                 .eq(BookRecords::getBookNature,bookRecords.getBookNature())
@@ -71,7 +64,13 @@ public class BookRecordsServiceImpl implements BookRecordsService {
         return prefix+code;
     }
 
+    @Override
+    public BookRecords selectById(String id) {
+        return bookRecordsMapper.selectById(id);
+    }
+
     private String findMaxCode(String prefix) {
         return bookRecordsMapper.findMaxCode(prefix);
     }
+
 }

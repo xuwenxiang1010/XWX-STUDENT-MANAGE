@@ -31,4 +31,8 @@ public class Libraries {
     private Integer flower;
     @TableField(exist = false)
     private Integer room;
+    @TableField(exist = false)
+    private Integer bookShelf;
+    @TableField(exist = false)
+    private Integer layer;
 }

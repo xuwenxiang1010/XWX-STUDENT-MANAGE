@@ -130,7 +130,9 @@
         data(){
             return{
                 filters: {
-                    bookCode: ""
+                    bookCode: "",
+                    bookName:"",
+
                 },
                 form:{},
                 id: 0,

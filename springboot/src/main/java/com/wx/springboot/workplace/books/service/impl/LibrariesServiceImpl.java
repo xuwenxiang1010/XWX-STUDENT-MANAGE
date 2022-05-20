@@ -26,7 +26,7 @@ public class LibrariesServiceImpl implements LibrariesService {
     public IPage<Libraries> queryPageList(IPage<Libraries> page, Libraries vo) {
         LambdaQueryWrapper<Libraries> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Libraries::getDeleted,0)
-                .eq(Libraries::getFatherId,"0")
+                .eq(Libraries::getFatherId,1)
                 .orderByDesc(Libraries::getCreateTime);
         return librariesMapper.selectPage(page,queryWrapper);
     }
@@ -34,7 +34,7 @@ public class LibrariesServiceImpl implements LibrariesService {
     @Override
     public Result add(Libraries libraries) {
         libraries.setCreateTime(new Date());
-        libraries.setFatherId("0");
+        libraries.setFatherId("1");
         LambdaQueryWrapper<Libraries> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Libraries::getName,libraries.getName())
                 .eq(Libraries::getDeleted,0);
@@ -48,7 +48,7 @@ public class LibrariesServiceImpl implements LibrariesService {
     }
 
     @Override
-    public Result roomName(Integer flower, Integer room, String id){
+    public Result roomName(Integer flower, Integer room,Integer bookShelf,Integer layer, String id){
         if (flower != 0 && room != 0){
             for (int i = 1;  i<=flower; i++){
                 String name1 = String.valueOf(i);
@@ -60,10 +60,31 @@ public class LibrariesServiceImpl implements LibrariesService {
                     lib.setName(name1+"0"+name2+"室");
                     lib.setCreateTime(new Date());
                     librariesMapper.insert(lib);
+                    for (int k =1;k<=bookShelf;k++){
+                        Libraries lib2 = new Libraries();
+                        lib2.setId(GetUUId.getUUID());
+                        lib2.setFatherId(lib.getId());
+                        lib2.setName(String.format("%03d",k)+"书架");
+                        lib2.setCreateTime(new Date());
+                        librariesMapper.insert(lib2);
+                        for (int l = 1;l<=layer;l++){
+                            Libraries lib3 = new Libraries();
+                            lib3.setId(GetUUId.getUUID());
+                            lib3.setFatherId(lib2.getId());
+                            lib3.setName("第"+l+"层");
+                            lib3.setCreateTime(new Date());
+                            librariesMapper.insert(lib3);
+                        }
+                    }
                 }
             }
             return Result.success();
         }
         return Result.error();
+    }
+
+    @Override
+    public Libraries selectById(String positionId) {
+        return librariesMapper.selectById(positionId);
     }
 }
