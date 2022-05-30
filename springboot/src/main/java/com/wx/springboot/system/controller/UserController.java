@@ -3,6 +3,7 @@ package com.wx.springboot.system.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wx.springboot.system.common.vo.Result;
+import com.wx.springboot.system.domain.dto.UserDto;
 import com.wx.springboot.system.domain.entity.User;
 import com.wx.springboot.system.service.UserService;
 import io.swagger.annotations.Api;
@@ -52,8 +53,8 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody User user){
-        Result result = userService.update(user);
+    public Result update(@RequestBody UserDto dto){
+        Result result = userService.update(dto);
         return result;
     }
 
@@ -69,11 +70,11 @@ public class UserController {
         return result;
     }
 
-   /* @GetMapping("/getRoleMenu")
-    public Result getRoleMenu(@RequestParam Long id){
-        Result result = userService.getRoleMenu(id);
+    @PostMapping("/setUserRole/{userId}")
+    public Result setUserRole(@PathVariable Long userId,@RequestBody List<Long> roleIds){
+        Result result = userService.setUserRole(userId,roleIds);
         return result;
-    }*/
+    }
 
 
 }

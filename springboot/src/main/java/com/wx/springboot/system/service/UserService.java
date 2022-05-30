@@ -19,7 +19,7 @@ public interface UserService {
 
     Result delete(Long id);
 
-    Result update(User user);
+    Result update(UserDto dto);
 
     IPage<User> pageList(IPage<User> page, User user);
 
@@ -31,4 +31,5 @@ public interface UserService {
 
     Result register(UserDto dto);
 
+    Result setUserRole(Long userId, List<Long> roleIds);
 }

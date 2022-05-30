@@ -25,6 +25,13 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @GetMapping("/list")
+    @ApiOperation(value = "list")
+    public Result list(){
+        List<Role> list = roleService.list();
+        return Result.success(list);
+    }
+
     @GetMapping("/pageList")
     @ApiOperation(value = "分页查询")
     public Result pageList(Role role, @RequestParam Integer pageNum, @RequestParam Integer pageSize){

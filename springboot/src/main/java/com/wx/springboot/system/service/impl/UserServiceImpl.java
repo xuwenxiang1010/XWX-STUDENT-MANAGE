@@ -9,6 +9,7 @@ import com.wx.springboot.system.dao.RoleDao;
 import com.wx.springboot.system.dao.UserDao;
 import com.wx.springboot.system.dao.UserRoleDao;
 import com.wx.springboot.system.domain.entity.Menu;
+import com.wx.springboot.system.domain.entity.Role;
 import com.wx.springboot.system.domain.entity.User;
 import com.wx.springboot.system.domain.entity.UserRole;
 import com.wx.springboot.system.domain.dto.UserDto;
@@ -112,9 +113,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result update(User user) {
+    public Result update(UserDto dto) {
+        User user = new User();
+        BeanUtils.copyProperties(dto,user);
         user.setUpdateTime(new Date());
         int update = userMapper.updateById(user);
+
+        List<Role> roleList = dto.getRoleList();
         return Result.success("修改成功");
     }
 
@@ -149,6 +154,13 @@ public class UserServiceImpl implements UserService {
             setRole(user2.getId());
             return  Result.success("添加成功");
         }
+    }
+
+    @Override
+    public Result setUserRole(Long userId, List<Long> roleIds) {
+
+
+        return null;
     }
 
     public List<Menu> getRoleMenu(Long id) {

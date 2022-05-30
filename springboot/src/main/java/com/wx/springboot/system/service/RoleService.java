@@ -22,4 +22,6 @@ public interface RoleService {
     Result getMenuList(Long roleId);
 
     Result setRoleMenu(Long roleId, List<Long> menuIds);
+
+	List<Role> list();
 }
