@@ -70,11 +70,12 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/setUserRole/{userId}")
-    public Result setUserRole(@PathVariable Long userId,@RequestBody List<Long> roleIds){
-        Result result = userService.setUserRole(userId,roleIds);
-        return result;
+    @GetMapping("/getRoles")
+    public Result getRoles(@RequestParam Long id){
+        List<Long> roles = userService.getRoles(id);
+        return Result.success(roles);
     }
+
 
 
 }

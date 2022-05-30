@@ -3,7 +3,7 @@
 
 <mapper namespace="com.wx.springboot.system.dao.RoleDao">
     <select id="getRoleInfo" resultType="com.wx.springboot.system.domain.vo.UserInfoVo">
-        select sur.id,sr.role_name,sr.description
+        select sur.id,sr.role_name,sr.description,sr.id as roleId
         from sys_user_role sur
             left join sys_role sr on sur.role_id = sr.id
         where sur.user_id = #{id}

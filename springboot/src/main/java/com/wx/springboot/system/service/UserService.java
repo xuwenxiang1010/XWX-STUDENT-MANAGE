@@ -31,5 +31,5 @@ public interface UserService {
 
     Result register(UserDto dto);
 
-    Result setUserRole(Long userId, List<Long> roleIds);
+    List<Long> getRoles(Long id);
 }

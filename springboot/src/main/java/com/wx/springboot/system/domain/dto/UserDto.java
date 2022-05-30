@@ -22,6 +22,6 @@ public class UserDto {
     private String address;
     private String email;
     List<Menu> menuList;
-    List<Role> roleList;
+    List<Long> roleList;
     private String token;
 }

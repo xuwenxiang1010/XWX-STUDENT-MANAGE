@@ -11,9 +11,6 @@
         <el-form-item>
           <el-button class="ml-5" @click="restLoad('filters')" icon="el-icon-refresh-left">重置</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button class="ml-5" @click="getRoles()" >重置</el-button>
-        </el-form-item>
       </el-form>
     </div>
 
@@ -40,17 +37,17 @@
               :header-cell-class-name="headerBG">
       <el-table-column type="selection" width="55" align="center">
       </el-table-column>
-      <el-table-column prop="userName" align="center" label="用户名" width="140">
+      <el-table-column prop="userName" align="center" label="用户名" >
       </el-table-column>
-      <el-table-column prop="userAge" align="center" label="年龄" width="140">
+      <el-table-column prop="userAge" align="center" label="年龄" >
       </el-table-column>
-      <el-table-column prop="phone" align="center" label="电话号码" width="120">
+      <el-table-column prop="phone" align="center" label="电话号码" >
       </el-table-column>
-      <el-table-column prop="email" align="center" label="邮箱" width="200">
+      <el-table-column prop="email" align="center" label="邮箱" >
       </el-table-column>
       <el-table-column prop="address" align="center" label="地址">
       </el-table-column>
-      <el-table-column align="center" label="操作" min-width="20px">
+      <el-table-column align="center" label="操作" min-width="60px">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
           <el-popconfirm
@@ -100,6 +97,17 @@
         <el-form-item label="地址">
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="角色" >
+          <el-select multiple placeholder="请选择" style="width: 100%" v-model="form.roleList">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogAdd = false">取 消</el-button>
@@ -127,10 +135,21 @@
         <el-form-item label="地址">
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-checkbox-button v-for="role in roleList" :label="role.id" :key="role.id">
-            {{role.roleName}}
-          </el-checkbox-button>
+        <el-form-item label="角色">
+          <el-select
+            multiple
+            placeholder="请选择"
+            v-model="list"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -155,6 +174,7 @@ export default {
       dialogEdit: false,
       tableData: [],
       total: 0,
+      list:[],
       pageNum: 1,
       pageSize: 5,
       multipleSelection: [],
@@ -202,11 +222,23 @@ export default {
     },
     handleAdd(){
       this.dialogAdd = true
+      this.getRoles()
       this.form = {}
+
     },
     handleEdit(row){
+      this.getRoles()
       this.dialogEdit = true
       this.form = row
+      this.request.get("/system/user/getRoles",{
+        params:{
+          id: row.id
+        }
+      }).then(res => {
+        console.log(res)
+        this.list = res.data
+      })
+
     },
     save(){
       this.request.post(this.url.add,this.form).then(res =>{
@@ -220,6 +252,7 @@ export default {
       })
     },
     update(){
+      this.form.roleList = this.list
       this.request.post(this.url.update,this.form).then(res =>{
         if (res){
           this.$message.success("编辑成功")
@@ -261,7 +294,7 @@ export default {
     },
     getRoles(){
       this.request.get(this.url.roleList).then(res => {
-        console.log(res.data)
+        //console.log(res.data)
         this.roleList = res.data
       })
     }

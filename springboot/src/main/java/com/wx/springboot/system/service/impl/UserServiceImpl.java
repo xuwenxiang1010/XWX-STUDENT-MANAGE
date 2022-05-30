@@ -1,5 +1,6 @@
 package com.wx.springboot.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wx.springboot.system.common.util.TokenUtil;
@@ -118,8 +119,8 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(dto,user);
         user.setUpdateTime(new Date());
         int update = userMapper.updateById(user);
-
-        List<Role> roleList = dto.getRoleList();
+        List<Long> roleList = dto.getRoleList();
+        setUserRole(dto.getId(),roleList);
         return Result.success("修改成功");
     }
 
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
         List<UserInfoVo> roleList = roleMapper.getRoleInfo(id);
         LambdaQueryWrapper<User> query = new LambdaQueryWrapper<>();
         query.eq(User::getId,id)
-                .eq(User::getDeleted,0);
+            .eq(User::getDeleted,0);
         User user = userMapper.selectOne(query);
         UserInfoDto userInfoDto = new UserInfoDto();
         BeanUtils.copyProperties(user,userInfoDto);
@@ -157,10 +158,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result setUserRole(Long userId, List<Long> roleIds) {
+    public List<Long> getRoles(Long id) {
+        List<Long> roleList = userRoleMapper.getRoleList(id);
+        return roleList;
+    }
 
-
-        return null;
+    public void setUserRole(Long userId, List<Long> roleIds) {
+        LambdaQueryWrapper<UserRole> query = new LambdaQueryWrapper<>();
+        query.eq(UserRole::getUserId,userId);
+        userRoleMapper.delete(query);
+        for (Long roleId : roleIds){
+            UserRole userRole = new UserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(roleId);
+            userRoleMapper.insert(userRole);
+        }
     }
 
     public List<Menu> getRoleMenu(Long id) {
