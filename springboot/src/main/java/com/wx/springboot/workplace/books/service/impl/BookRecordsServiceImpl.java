@@ -53,20 +53,45 @@ public class BookRecordsServiceImpl implements BookRecordsService {
     }
 
     @Override
-    public String getCode() {
+    public Result getCode() {
         String prefix = "ZGTS" + new SimpleDateFormat("yyyyMMdd").format(new Date());
         String goodsCode = findMaxCode(prefix);
         if (StringUtils.isBlank(goodsCode)) {
-            return prefix+"001";
+            return Result.success(prefix+"001");
         }
         String sum = goodsCode.substring(goodsCode.length() - 3);
         String code = String.format("%03d", Integer.parseInt(sum) + 1);
-        return prefix+code;
+        return Result.success(prefix+code);
     }
 
     @Override
     public BookRecords selectById(String id) {
         return bookRecordsMapper.selectById(id);
+    }
+
+    @Override
+    public Result delete(BookRecords bookRecords) {
+        bookRecords.setDeleted(1);
+        bookRecordsMapper.updateById(bookRecords);
+        return Result.success("删除成功");
+    }
+
+    @Override
+    public Result update(BookRecords bookRecords) {
+        bookRecords.setUpdateTime(new Date());
+        LambdaQueryWrapper<BookRecords> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(BookRecords::getBookName,bookRecords.getBookName())
+                .eq(BookRecords::getBookNature,bookRecords.getBookNature())
+                .eq(BookRecords::getBookCategory,bookRecords.getBookCategory())
+                .ne(BookRecords::getId,bookRecords.getId())
+                .eq(BookRecords::getDeleted,0);
+        BookRecords book = bookRecordsMapper.selectOne(queryWrapper);
+        if (book != null ){
+            return Result.error(Constants.CODE_400,"该图书已存在");
+        }else {
+            bookRecordsMapper.updateById(bookRecords);
+            return Result.success("修改成功");
+        }
     }
 
     private String findMaxCode(String prefix) {

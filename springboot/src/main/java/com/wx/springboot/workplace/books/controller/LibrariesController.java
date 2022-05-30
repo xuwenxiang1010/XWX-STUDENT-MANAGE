@@ -30,15 +30,27 @@ public class LibrariesController {
     }
 
     @PostMapping("/add")
-    public Result add(Libraries libraries){
+    public Result add(@RequestBody Libraries libraries){
         if (libraries!=null){
-            libraries.setId(GetUUId.getUUID());
             librariesService.add(libraries);
-            librariesService.roomName(libraries.getFlower(),libraries.getRoom(),libraries.getBookShelf(),libraries.getLayer(),libraries.getId());
             return Result.success("添加成功");
         }
         return Result.error();
     }
 
 
+    @PutMapping("/edit")
+    public Result edit(@RequestBody Libraries libraries){
+        if (libraries!=null){
+            librariesService.edit(libraries);
+            return Result.success("添加成功");
+        }
+        return Result.error();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable String id){
+        Libraries libraries = librariesService.selectById(id);
+        return librariesService.delete(libraries);
+    }
 }

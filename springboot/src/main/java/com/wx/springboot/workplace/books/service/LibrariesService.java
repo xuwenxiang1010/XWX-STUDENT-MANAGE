@@ -5,6 +5,8 @@ import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.workplace.books.entity.Libraries;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author wyb
  */
@@ -25,13 +27,15 @@ public interface LibrariesService {
     Result add(Libraries libraries);
 
     /**
-     * 自动生成房间
-     * @param flower
-     * @param room
+     * 选中位置
      * @param id
      * @return
      */
-    Result roomName(Integer flower, Integer room,Integer bookShelf,Integer layer, String id);
+    Libraries selectById(String id);
 
-    Libraries selectById(String positionId);
+    Result edit(Libraries libraries);
+
+    Result delete(Libraries libraries);
+
+    List<Libraries> selectAll();
 }

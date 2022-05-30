@@ -17,4 +17,5 @@ public interface BookRecordsMapper extends BaseMapper<BookRecords> {
      * @return
      */
     String findMaxCode(@Param("prefix")String prefix);
+
 }

@@ -29,7 +29,26 @@ public interface BookRecordsService{
      * 获取图书编码
      * @return
      */
-    String getCode();
+    Result getCode();
 
+    /**
+     * 选中图书
+     * @param id
+     * @return
+     */
     BookRecords selectById(String id);
+
+    /**
+     * 删除图书
+     * @param bookRecords
+     * @return
+     */
+    Result delete(BookRecords bookRecords);
+
+    /**
+     * 修改
+     * @param bookRecords
+     * @return
+     */
+    Result update(BookRecords bookRecords);
 }

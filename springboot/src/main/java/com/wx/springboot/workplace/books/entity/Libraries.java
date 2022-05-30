@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author wyb
@@ -14,10 +15,8 @@ import java.util.Date;
 @Data
 @TableName(value = "book_libraries")
 public class Libraries {
-    @TableId(type = IdType.INPUT)
+    @TableId(type = IdType.ASSIGN_ID)
     private String id;
-
-    private String fatherId;
 
     private String name;
 
@@ -27,12 +26,23 @@ public class Libraries {
 
     private Integer deleted;
 
-    @TableField(exist = false)
     private Integer flower;
-    @TableField(exist = false)
+
     private Integer room;
-    @TableField(exist = false)
+
     private Integer bookShelf;
-    @TableField(exist = false)
+
     private Integer layer;
+
+    @TableField(exist = false)
+    private List<String> flowerList;
+
+    @TableField(exist = false)
+    private List<String> roomList;
+
+    @TableField(exist = false)
+    private List<String> shelfList;
+
+    @TableField(exist = false)
+    private List<String> layerList;
 }
