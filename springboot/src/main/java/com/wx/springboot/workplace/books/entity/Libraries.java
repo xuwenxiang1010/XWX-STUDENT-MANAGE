@@ -34,15 +34,4 @@ public class Libraries {
 
     private Integer layer;
 
-    @TableField(exist = false)
-    private List<String> flowerList;
-
-    @TableField(exist = false)
-    private List<String> roomList;
-
-    @TableField(exist = false)
-    private List<String> shelfList;
-
-    @TableField(exist = false)
-    private List<String> layerList;
 }

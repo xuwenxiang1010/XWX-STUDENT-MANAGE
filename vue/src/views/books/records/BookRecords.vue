@@ -99,33 +99,79 @@
     </div>
 
     <el-dialog title="新增图书" :visible.sync="dialogAdd" width="30%">
-      <el-form label-width="100px">
+      <el-form label-width="120px">
         <el-form-item label="图书编号">
           <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
         </el-form-item>
         <el-form-item label="请输入图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
         </el-form-item>
-        <br/>
-        <p>选择图书放置位置</p>
-        <br/>
+        <el-form-item label="请选择图书性质">
+          <el-select v-model="form.bookNature" placeholder="请选择图书性质">
+            <el-option v-for="item in natureList"
+                       :label="item.text"
+                       :key="item.value"
+                       :value="item.value">
+              <i :class="item.text"/> {{item.text}}
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="请选择图书类别">
+          <el-select v-model="form.bookCategory" placeholder="请选择图书分类">
+            <el-option v-for="item in categoryList"
+                       :label="item.text"
+                       :key="item.value"
+                       :value="item.value">
+              <i :class="item.text"/> {{item.text}}
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="图书馆">
-          <el-select clearable v-model="form.libId" placeholder="请选择">
-            <el-option v-for="item in parm" :key="item.id" :value="item.name"><i :class="item.name"/> {{item.name}}</el-option>
+          <el-select clearable v-model="form.libId" placeholder="请选择图书馆" @change="getOther(form.libId)">
+            <el-option v-for="item in librariesList"
+                       :label="item.name"
+                       :key="item.id"
+                       :value="item.id">
+              <i :class="item.name"/> {{item.name}}
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="请选择楼层">
-          <el-input v-model="form.floower" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="请选择房间">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="请选择书架">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="请选择书架层数">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
-        </el-form-item>
+            <el-select v-model="form.flower" autocomplete="off">
+              <el-option v-for="item in floorList"
+                         :label="item.label"
+                         :key="item.code"
+                         :value="item.code"><i :class="item.label"/> {{item.label}}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="请选择房间">
+            <el-select v-model="form.room" autocomplete="off">
+              <el-option v-for="item in roomList"
+                         :label="item.label"
+                         :key="item.code"
+                         :value="item.code"><i :class="item.label"/> {{item.label}}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="请选择书架">
+            <el-select v-model="form.bookShelf" autocomplete="off">
+              <el-option v-for="item in shelfList"
+                         :label="item.label"
+                         :key="item.code"
+                         :value="item.code"><i :class="item.label"/> {{item.label}}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="请选择书架层数">
+            <el-select v-model="form.layer" autocomplete="off">
+              <el-option v-for="item in layerList"
+                         :label="item.label"
+                         :key="item.code"
+                         :value="item.code"><i :class="item.label"/> {{item.label}}
+              </el-option>
+            </el-select>
+          </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogAdd = false">取 消</el-button>
@@ -183,7 +229,13 @@
                     categoryName:""
                 },
                 form:{},
-                parm:[],
+                librariesList:[],
+                floorList:[],
+                roomList:[],
+                shelfList:[],
+                layerList:[],
+                natureList:[],
+                categoryList:[],
                 dialogAdd: false,
                 dialogEdit: false,
                 tableData: [],
@@ -199,12 +251,14 @@
                     remove: "/books/records/delete/",
                     getCode:"/books/records/getCode",
                     getLibId:"/books/records/getLibId",
+                    getOther:"/books/records/getOther/",
+                    getDict:"/system/dict/getItem/",
                 },
                 props:{
                     label : 'name',
                 },
                 expands:[],
-                checks:[]
+                checks:[],
             }
         },
         created() {
@@ -224,12 +278,9 @@
                         end:this.filters .end,
                     }
                 }).then(res=>{
-
                     this.tableData = res.data.records
                     this.total = res.data.total
-
                 })
-
             },
             restLoad(form){
                 this.$refs[form].resetFields()
@@ -248,12 +299,23 @@
                     if (res){
                         this.form = {}
                         this.form.bookCode = res.message
-                        this.request.get(this.url.getLibId).then(res =>{
-                            this.parm = res.data
+                        request.get(this.url.getLibId).then(lib =>{
+                            if (lib){
+                                this.librariesList = lib.data
+                            }
+                        })
+                        request.post(this.url.getDict + "book_nature").then(nature=>{
+                            if(nature){
+                                  this.natureList = nature.data
+                            }
+                        })
+                        request.post(this.url.getDict + "book_category").then(cate=>{
+                            if(cate){
+                                this.categoryList = cate.data
+                            }
                         })
                         this.dialogAdd = true
                     }
-                    debugger
                 })
             },
             handleEdit(row){
@@ -293,6 +355,16 @@
                         this.load()
                     }else {
                         this.$message.error("删除失败")
+                    }
+                })
+            },
+            getOther(libId){
+                this.request.post(this.url.getOther + libId).then(res=>{
+                    if (res){
+                        this.floorList = res.data.floorList
+                        this.roomList = res.data.roomList
+                        this.shelfList = res.data.shelfList
+                        this.layerList = res.data.layerList
                     }
                 })
             },
