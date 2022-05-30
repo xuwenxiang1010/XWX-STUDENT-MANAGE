@@ -5,8 +5,41 @@
         <el-form-item prop="bookCode">
           <el-input v-model="filters.bookCode" style="width: 150px" placeholder="请输入图书编号" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="roleName">
-          <el-input v-model="filters.bookName" style="width: 150px" placeholder="请输入图" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
+        <el-form-item prop="bookName">
+          <el-input v-model="filters.bookName" style="width: 150px" placeholder="请输入图书名称" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="bookNature">
+          <el-select v-model="filters.bookNature" style="width: 150px" placeholder="请选择图书性质" suffix-icon="el-icon-set-up" class="ml-5" clearable>
+            <el-option value="">请选择</el-option>
+            <el-option value="1">儿童读物</el-option>
+            <el-option value="2">成人读物</el-option>
+            <el-option value="3">R18读物</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="bookCategory">
+          <el-select v-model="filters.bookCategory" style="width: 150px" placeholder="请选择图书分类" suffix-icon="el-icon-set-up" class="ml-5" clearable>
+            <el-option value="">请选择</el-option>
+            <el-option value="1">科幻</el-option>
+            <el-option value="2">玄幻</el-option>
+            <el-option value="3">奇幻</el-option>
+            <el-option value="4">武侠</el-option>
+            <el-option value="5">仙侠</el-option>
+            <el-option value="6">都市</el-option>
+            <el-option value="7">游戏</el-option>
+            <el-option value="8">灵异</el-option>
+            <el-option value="9">历史</el-option>
+            <el-option value="10">军事</el-option>
+            <el-option value="11">职场</el-option>
+            <el-option value="12">体育</el-option>
+            <el-option value="13">同人</el-option>
+            <el-option value="14">轻小说</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="start">
+          <el-date-picker v-model="filters.start" style="width: 150px" placeholder="请选择开始时间" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-date-picker>
+        </el-form-item>
+        <el-form-item prop="end">
+          <el-date-picker v-model="filters.end" style="width: 150px" placeholder="请选择结束时间" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="ml-5" @click="load" icon="el-icon-search">搜索</el-button>
@@ -18,7 +51,7 @@
     </div>
 
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+      <el-button type="primary" @click="handleAdd">新增<i class="el-icon-circle-plus-outline"></i></el-button>
     </div>
 
 
@@ -28,6 +61,12 @@
       <el-table-column prop="bookCode" align="center" label="图书编号">
       </el-table-column>
       <el-table-column prop="bookName" align="center" label="图书名称">
+      </el-table-column>
+      <el-table-column prop="position" align="center" label="图书位置">
+      </el-table-column>
+      <el-table-column prop="natureName" align="center" label="图书性质">
+      </el-table-column>
+      <el-table-column prop="categoryName" align="center" label="图书类别">
       </el-table-column>
       <el-table-column align="center" label="操作" width="300px">
         <template slot-scope="scope">
@@ -60,26 +99,31 @@
     </div>
 
     <el-dialog title="新增图书" :visible.sync="dialogAdd" width="30%">
-      <el-form label-width="70px">
+      <el-form label-width="100px">
         <el-form-item label="图书编号">
-          <el-input v-model="bookCode" autocomplete="off" readonly></el-input>
+          <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
         </el-form-item>
-        <el-form-item label="图书名称">
+        <el-form-item label="请输入图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="图书名称">
+        <br/>
+        <p>选择图书放置位置</p>
+        <br/>
+        <el-form-item label="图书馆">
+          <el-select clearable v-model="form.libId" placeholder="请选择">
+            <el-option v-for="item in parm" :key="item.id" :value="item.name"><i :class="item.name"/> {{item.name}}</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="请选择楼层">
+          <el-input v-model="form.floower" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="请选择房间">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="图书名称">
+        <el-form-item label="请选择书架">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="图书名称">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="图书名称">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="图书名称">
+        <el-form-item label="请选择书架层数">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -97,8 +141,8 @@
         <el-form-item label="图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="图书编号">
-          <el-input v-model="form.bookCode" autocomplete="off"></el-input>
+        <el-form-item label="图书馆">
+          <el-select v-model="form.bookCode" autocomplete="off"></el-select>
         </el-form-item>
         <el-form-item label="图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
@@ -125,6 +169,8 @@
 </template>
 
 <script>
+    import request from "../../../utils/request";
+
     export default {
         name: "BookRecords",
         data(){
@@ -132,13 +178,14 @@
                 filters: {
                     bookCode: "",
                     bookName:"",
-
+                    position:"",
+                    natureName:"",
+                    categoryName:""
                 },
                 form:{},
-                id: 0,
+                parm:[],
                 dialogAdd: false,
                 dialogEdit: false,
-                dialogMenu: false,
                 tableData: [],
                 total: 0,
                 pageNum: 1,
@@ -148,9 +195,10 @@
                 url: {
                     list: "/books/records/list",
                     add: "/books/records/add",
-                    update: "/books/records/update",
+                    edit: "/books/records/update",
                     remove: "/books/records/delete/",
-                    getCode:"/books/records/getCode"
+                    getCode:"/books/records/getCode",
+                    getLibId:"/books/records/getLibId",
                 },
                 props:{
                     label : 'name',
@@ -171,11 +219,15 @@
                         bookCode: this.filters.bookCode,
                         bookName:this.filters.bookName,
                         bookNature:this.filters.bookNature,
-                        book
+                        bookCategory:this.filters.bookCategory,
+                        start:this.filters.start,
+                        end:this.filters .end,
                     }
                 }).then(res=>{
+
                     this.tableData = res.data.records
                     this.total = res.data.total
+
                 })
 
             },
@@ -192,11 +244,17 @@
                 this.load()
             },
             handleAdd(){
-                this.dialogAdd = true
-                this.form = {},
-                    this.request.get(this.url.getCode).then(res => {
-                        this.bookCode = res.bookCode
-                    })
+                request.get(this.url.getCode).then(res => {
+                    if (res){
+                        this.form = {}
+                        this.form.bookCode = res.message
+                        this.request.get(this.url.getLibId).then(res =>{
+                            this.parm = res.data
+                        })
+                        this.dialogAdd = true
+                    }
+                    debugger
+                })
             },
             handleEdit(row){
                 this.dialogEdit = true
@@ -214,11 +272,10 @@
                 })
             },
             update(){
-                this.request.post(this.url.update,this.form).then(res =>{
+                this.request.put(this.url.edit,this.form).then(res =>{
                     if (res){
                         this.$message.success("编辑成功")
                         this.dialogEdit = false
-                        this.dialogMenu = false
                         this.load()
                     }else {
                         this.$message.error("编辑失败")
@@ -229,12 +286,8 @@
                 this.dialogEdit = false
                 this.load()
             },
-            cancelSelect(){
-                this.dialogMenu = false
-                this.load()
-            },
             remove(id){
-                this.request.post(this.url.remove + id).then(res =>{
+                this.request.delete(this.url.remove + id).then(res =>{
                     if (res){
                         this.$message.success("删除成功")
                         this.load()

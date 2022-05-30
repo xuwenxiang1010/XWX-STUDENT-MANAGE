@@ -53,7 +53,7 @@ public class BookRecords {
     /**
      * 图书最后位置地址ID
      */
-    private String positionId;
+    private String positionCode;
 
     /**
      * 图书创建时间
@@ -91,5 +91,20 @@ public class BookRecords {
     public String getCategoryName() {
         return CategoryEnum.valueByCode(getBookCategory());
     }
+
+    @TableField(exist = false)
+    private String libId;
+
+    @TableField(exist = false)
+    private Integer flower;
+
+    @TableField(exist = false)
+    private Integer room;
+
+    @TableField(exist = false)
+    private Integer bookShelf;
+
+    @TableField(exist = false)
+    private Integer layer;
 
 }

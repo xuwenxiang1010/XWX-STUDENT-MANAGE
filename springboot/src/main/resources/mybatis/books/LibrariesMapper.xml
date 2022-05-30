@@ -8,4 +8,9 @@
         from book_librarys
         where deleted = 0 and name = #{name}
     </select>
+    <select id="selectAll" resultType="com.wx.springboot.workplace.books.entity.Libraries">
+        select *
+        from book_libraries
+        where deleted = 0
+    </select>
 </mapper>
