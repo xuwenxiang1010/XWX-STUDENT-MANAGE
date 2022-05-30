@@ -180,30 +180,78 @@
     </el-dialog>
 
     <el-dialog title="编辑图书" :visible.sync="dialogEdit" width="30%">
-      <el-form label-width="70px">
+      <el-form label-width="120px">
         <el-form-item label="图书编号">
-        <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
-      </el-form-item>
-        <el-form-item label="图书名称">
+          <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="请输入图书名称">
           <el-input v-model="form.bookName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="请选择图书性质">
+          <el-select v-model="form.bookNature" placeholder="请选择图书性质">
+            <el-option v-for="item in natureList"
+                       :label="item.text"
+                       :key="item.value"
+                       :value="item.value">
+              <i :class="item.text"/> {{item.text}}
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="请选择图书类别">
+          <el-select v-model="form.bookCategory" placeholder="请选择图书分类">
+            <el-option v-for="item in categoryList"
+                       :label="item.text"
+                       :key="item.value"
+                       :value="item.value">
+              <i :class="item.text"/> {{item.text}}
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="图书馆">
-          <el-select v-model="form.bookCode" autocomplete="off"></el-select>
+          <el-select clearable v-model="form.libId" placeholder="请选择图书馆" @change="getOther(form.libId)">
+            <el-option v-for="item in librariesList"
+                       :label="item.name"
+                       :key="item.id"
+                       :value="item.id">
+              <i :class="item.name"/> {{item.name}}
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="图书名称">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
+        <el-form-item label="请选择楼层">
+          <el-select v-model="form.flower" autocomplete="off">
+            <el-option v-for="item in floorList"
+                       :label="item.label"
+                       :key="item.code"
+                       :value="item.code"><i :class="item.label"/> {{item.label}}
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="图书编号">
-          <el-input v-model="form.bookCode" autocomplete="off"></el-input>
+        <el-form-item label="请选择房间">
+          <el-select v-model="form.room" autocomplete="off">
+            <el-option v-for="item in roomList"
+                       :label="item.label"
+                       :key="item.code"
+                       :value="item.code"><i :class="item.label"/> {{item.label}}
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="图书名称">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
+        <el-form-item label="请选择书架">
+          <el-select v-model="form.bookShelf" autocomplete="off">
+            <el-option v-for="item in shelfList"
+                       :label="item.label"
+                       :key="item.code"
+                       :value="item.code"><i :class="item.label"/> {{item.label}}
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="图书编号">
-          <el-input v-model="form.bookCode" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="图书名称">
-          <el-input v-model="form.bookName" autocomplete="off"></el-input>
+        <el-form-item label="请选择书架层数">
+          <el-select v-model="form.layer" autocomplete="off">
+            <el-option v-for="item in layerList"
+                       :label="item.label"
+                       :key="item.code"
+                       :value="item.code"><i :class="item.label"/> {{item.label}}
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -321,6 +369,21 @@
             handleEdit(row){
                 this.dialogEdit = true
                 this.form = row
+                request.get(this.url.getLibId).then(lib =>{
+                    if (lib){
+                        this.librariesList = lib.data
+                    }
+                })
+                request.post(this.url.getDict + "book_nature").then(nature=>{
+                    if(nature){
+                        this.natureList = nature.data
+                    }
+                })
+                request.post(this.url.getDict + "book_category").then(cate=>{
+                    if(cate){
+                        this.categoryList = cate.data
+                    }
+                })
             },
             save(){
                 this.request.post(this.url.add,this.form).then(res =>{

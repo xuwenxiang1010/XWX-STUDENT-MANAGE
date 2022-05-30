@@ -42,7 +42,15 @@ public class BookRecordsController {
         IPage<BookRecords> page = new Page<>(pageNum, pageSize);
         IPage<BookRecords> pageList = bookRecordsService.queryPageList(page, vo);
         for (BookRecords records : pageList.getRecords()){
-            records.setPosition(address(records.getPositionCode()));
+            if (records.getPositionCode()!=null){
+                String number = records.getPositionCode();
+                records.setLibId(number.substring(0,19));
+                records.setFlower(Integer.valueOf(number.substring(19,21)));
+                records.setRoom(Integer.valueOf(number.substring(21,23)));
+                records.setBookShelf(Integer.valueOf(number.substring(23,25)));
+                records.setLayer(Integer.valueOf(number.substring(25,27)));
+                records.setPosition(address(number));
+            }
         }
         return Result.success(pageList);
     }
@@ -114,7 +122,6 @@ public class BookRecordsController {
 
     private String address(String positionCode){
         String position = "";
-        if (positionCode!=null){
             String number = positionCode;
             String pId = number.substring(0,19);
             int f = Integer.valueOf(number.substring(19,21));
@@ -125,7 +132,6 @@ public class BookRecordsController {
             if(f<=libraries.getFlower()&&r<=libraries.getRoom()&&b<=libraries.getBookShelf()&&l<=libraries.getLayer()){
                 position = (libraries.getName()+f+"0"+r+"室"+String.format("%03d",b)+"号书架第"+l+"层！");
             }
-        }
         return position;
     }
 
