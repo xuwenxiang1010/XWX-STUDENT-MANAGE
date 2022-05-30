@@ -29,14 +29,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-    password:
-    timeout: 10000
-    jedis:
-      pool:
-        max-idle: 8
-        min-idle: 10
-        max-active: 100
-        max-wait: -1
   servlet:
     multipart:
       max-file-size: 100MB

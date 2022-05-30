@@ -11,6 +11,9 @@
         <el-form-item>
           <el-button class="ml-5" @click="restLoad('filters')" icon="el-icon-refresh-left">重置</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button class="ml-5" @click="getRoles()" >重置</el-button>
+        </el-form-item>
       </el-form>
     </div>
 
@@ -124,6 +127,11 @@
         <el-form-item label="地址">
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-checkbox-button v-for="role in roleList" :label="role.id" :key="role.id">
+            {{role.roleName}}
+          </el-checkbox-button>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelUpdate">取 消</el-button>
@@ -151,13 +159,15 @@ export default {
       pageSize: 5,
       multipleSelection: [],
       headerBG: 'headerBG',
+      roleList: [],
       url: {
         pageList: "/system/user/pageList",
         add: "/system/user/add",
         update: "/system/user/update",
         remove: "/system/user/delete/",
         batchRemove: "/system/user/batchDelete",
-        getUserRole: "/system/user/getUserInfo"
+        getUserRole: "/system/user/getUserInfo",
+        roleList: "/system/role/list"
       },
     }
   },
@@ -234,7 +244,6 @@ export default {
         }
       })
     },
-
     batchRemove(){
       let ids = this.multipleSelection.map(v => v.id)
       if(ids.length == 0){
@@ -249,7 +258,12 @@ export default {
           }
         })
       }
-
+    },
+    getRoles(){
+      this.request.get(this.url.roleList).then(res => {
+        console.log(res.data)
+        this.roleList = res.data
+      })
     }
   }
 }

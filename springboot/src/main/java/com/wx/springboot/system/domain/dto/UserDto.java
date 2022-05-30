@@ -1,6 +1,7 @@
 package com.wx.springboot.system.domain.dto;
 
 import com.wx.springboot.system.domain.entity.Menu;
+import com.wx.springboot.system.domain.entity.Role;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +17,11 @@ public class UserDto {
     private Long id;
     private String userName;
     private String password;
+    private Integer userAge;
+    private String phone;
+    private String address;
+    private String email;
     List<Menu> menuList;
+    List<Role> roleList;
     private String token;
 }

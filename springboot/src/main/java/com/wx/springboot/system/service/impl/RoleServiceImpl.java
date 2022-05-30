@@ -104,6 +104,13 @@ public class RoleServiceImpl implements RoleService {
         return Result.success();
     }
 
+    @Override
+    public List<Role> list() {
+        LambdaQueryWrapper<Role> query = new LambdaQueryWrapper<>();
+        query.eq(Role::getDeleted,0);
+        return roleMapper.selectList(query);
+    }
+
     private void deleteRoleMenu(Long roleId){
         roleMenuMapper.deleteRoleMenu(roleId);
     }
