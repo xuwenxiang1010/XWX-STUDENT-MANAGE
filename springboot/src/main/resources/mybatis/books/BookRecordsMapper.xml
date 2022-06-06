@@ -8,4 +8,14 @@
         from book_records
         where book_code like concat('%', #{prefix}, '%')
     </select>
+    <select id="selectPostCode" resultType="java.lang.Integer">
+        select count(*)
+        from book_records
+        where deleted = 0
+    </select>
+    <select id="selectPositionCode" resultType="java.lang.Integer">
+        select count(*)
+        from book_records
+        where deleted = 0 and id != #{id}
+    </select>
 </mapper>
