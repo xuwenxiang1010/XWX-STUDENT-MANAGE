@@ -21,6 +21,23 @@ import java.util.Date;
 public class BookRecordsServiceImpl implements BookRecordsService {
     @Autowired
     private BookRecordsMapper bookRecordsMapper;
+
+    /**
+     * 设置每层书架最多放置30本书
+     */
+    private static final Integer SAME_POSITION_CODE = 31;
+
+    /**
+     * 书籍数量达到可删除的值
+     */
+    private static final Integer STOCK_NUM = 0;
+
+    /**
+     *图书编码前缀：中国图书
+     */
+    private static final String BOOK_CODE_PREFIX = "ZhongGuoTuShu";
+
+
     @Override
     public IPage<BookRecords> queryPageList(IPage<BookRecords> page, BookRecordsVo vo) {
         LambdaQueryWrapper<BookRecords> query = new LambdaQueryWrapper<>();
@@ -44,17 +61,22 @@ public class BookRecordsServiceImpl implements BookRecordsService {
                 .eq(BookRecords::getBookCategory,bookRecords.getBookCategory())
                 .eq(BookRecords::getDeleted,0);
         BookRecords book = bookRecordsMapper.selectOne(queryWrapper);
+        String total =  bookRecords.getPositionCode();
         if (book != null ){
-            return Result.error(Constants.CODE_400,"该图书已存在");
+            return Result.error("该图书已存在");
         }else {
-            bookRecordsMapper.insert(bookRecords);
-            return Result.success("添加成功");
+           int x = bookRecordsMapper.selectPostCode(total);
+            if (bookRecordsMapper.selectPostCode(total) < SAME_POSITION_CODE ){
+                bookRecordsMapper.insert(bookRecords);
+                return Result.success("添加成功");
+            }
+            return Result.error("该位置以放满图书，请更换位置");
         }
     }
 
     @Override
     public Result getCode() {
-        String prefix = "ZGTS" + new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String prefix = BOOK_CODE_PREFIX + new SimpleDateFormat("yyyyMMdd").format(new Date());
         String goodsCode = findMaxCode(prefix);
         if (StringUtils.isBlank(goodsCode)) {
             return Result.success(prefix+"001");
@@ -71,13 +93,23 @@ public class BookRecordsServiceImpl implements BookRecordsService {
 
     @Override
     public Result delete(BookRecords bookRecords) {
-        bookRecords.setDeleted(1);
-        bookRecordsMapper.updateById(bookRecords);
-        return Result.success("删除成功");
+        if (bookRecords.getStock() > STOCK_NUM){
+            bookRecords.setDeleted(1);
+            bookRecordsMapper.updateById(bookRecords);
+            return Result.success("删除成功");
+        }else {
+            return Result.error("该图书还存在库存，无法删除");
+        }
     }
 
     @Override
     public Result update(BookRecords bookRecords) {
+        String code = bookRecords.getLibId()
+                +String.format("%02d",bookRecords.getFlower())
+                +String.format("%02d",bookRecords.getRoom())
+                +String.format("%02d",bookRecords.getBookShelf())
+                +String.format("%02d",bookRecords.getLayer());
+        bookRecords.setPositionCode(code);
         bookRecords.setUpdateTime(new Date());
         LambdaQueryWrapper<BookRecords> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(BookRecords::getBookName,bookRecords.getBookName())
@@ -87,10 +119,13 @@ public class BookRecordsServiceImpl implements BookRecordsService {
                 .eq(BookRecords::getDeleted,0);
         BookRecords book = bookRecordsMapper.selectOne(queryWrapper);
         if (book != null ){
-            return Result.error(Constants.CODE_400,"该图书已存在");
+            return Result.error("该图书已存在");
         }else {
-            bookRecordsMapper.updateById(bookRecords);
-            return Result.success("修改成功");
+            if (bookRecordsMapper.selectPositionCode(bookRecords.getPositionCode(),bookRecords.getId()) <= SAME_POSITION_CODE ){
+                bookRecordsMapper.updateById(bookRecords);
+                return Result.success("修改成功");
+            }
+            return Result.error("该位置以放满图书，请更换位置");
         }
     }
 

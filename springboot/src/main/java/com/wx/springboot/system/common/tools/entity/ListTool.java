@@ -1,4 +1,4 @@
-package com.wx.springboot.workplace.books.entity;
+package com.wx.springboot.system.common.tools.entity;
 
 import lombok.Data;
 

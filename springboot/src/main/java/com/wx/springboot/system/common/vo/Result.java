@@ -33,7 +33,9 @@ public class Result {
     public static Result error(String code,String message){
         return new Result(code,message,null);
     }
-
+    public static Result error(String message){
+        return new Result(null,message,null);
+    }
     public static Result error(){
         return new Result(Constants.CODE_500,"系统错误",null);
     }

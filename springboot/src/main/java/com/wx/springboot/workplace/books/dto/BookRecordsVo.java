@@ -1,6 +1,8 @@
 package com.wx.springboot.workplace.books.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * @author dell
  */
@@ -26,9 +28,11 @@ public class BookRecordsVo {
     /**
      * 选择最初时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private String start;
     /**
      * 选择截止时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private String end;
 }

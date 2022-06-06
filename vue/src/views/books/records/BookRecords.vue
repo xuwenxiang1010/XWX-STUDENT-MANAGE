@@ -10,36 +10,29 @@
         </el-form-item>
         <el-form-item prop="bookNature">
           <el-select v-model="filters.bookNature" style="width: 150px" placeholder="请选择图书性质" suffix-icon="el-icon-set-up" class="ml-5" clearable>
-            <el-option value="">请选择</el-option>
-            <el-option value="1">儿童读物</el-option>
-            <el-option value="2">成人读物</el-option>
-            <el-option value="3">R18读物</el-option>
+            <el-option v-for="item in natureList"
+                       :label="item.text"
+                       :key="item.value"
+                       :value="item.value">
+              <i :class="item.text"/> {{item.text}}
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="bookCategory">
           <el-select v-model="filters.bookCategory" style="width: 150px" placeholder="请选择图书分类" suffix-icon="el-icon-set-up" class="ml-5" clearable>
-            <el-option value="">请选择</el-option>
-            <el-option value="1">科幻</el-option>
-            <el-option value="2">玄幻</el-option>
-            <el-option value="3">奇幻</el-option>
-            <el-option value="4">武侠</el-option>
-            <el-option value="5">仙侠</el-option>
-            <el-option value="6">都市</el-option>
-            <el-option value="7">游戏</el-option>
-            <el-option value="8">灵异</el-option>
-            <el-option value="9">历史</el-option>
-            <el-option value="10">军事</el-option>
-            <el-option value="11">职场</el-option>
-            <el-option value="12">体育</el-option>
-            <el-option value="13">同人</el-option>
-            <el-option value="14">轻小说</el-option>
+            <el-option v-for="item in categoryList"
+                       :label="item.text"
+                       :key="item.value"
+                       :value="item.value">
+              <i :class="item.text"/> {{item.text}}
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="start">
-          <el-date-picker v-model="filters.start" style="width: 150px" placeholder="请选择开始时间" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-date-picker>
+          <el-date-picker v-model="filters.start" style="width: 200px" placeholder="请选择开始时间" suffix-icon="el-icon-set-up" class="ml-5" clearable format="yyyy-MM-dd 00:00:00"></el-date-picker>
         </el-form-item>
         <el-form-item prop="end">
-          <el-date-picker v-model="filters.end" style="width: 150px" placeholder="请选择结束时间" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-date-picker>
+          <el-date-picker v-model="filters.end" style="width: 200px" placeholder="请选择结束时间" suffix-icon="el-icon-set-up" class="ml-5" clearable format="yyyy-MM-dd 23:59:59"></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="ml-5" @click="load" icon="el-icon-search">搜索</el-button>
@@ -70,7 +63,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="300px">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row),getOther(form.libId)">编辑</el-button>
           <el-popconfirm
             class="ml-5"
             confirm-button-text='确定'
@@ -98,7 +91,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="新增图书" :visible.sync="dialogAdd" width="30%">
+    <el-dialog title="新增图书" :visible.sync="dialogAdd" width="35%" :rules="rules">
       <el-form label-width="120px">
         <el-form-item label="图书编号">
           <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
@@ -127,7 +120,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="图书馆">
-          <el-select clearable v-model="form.libId" placeholder="请选择图书馆" @change="getOther(form.libId)">
+          <el-select v-model="form.libId" placeholder="请选择图书馆" @change="getOther(form.libId)">
             <el-option v-for="item in librariesList"
                        :label="item.name"
                        :key="item.id"
@@ -179,7 +172,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="编辑图书" :visible.sync="dialogEdit" width="30%">
+    <el-dialog title="编辑图书" :visible.sync="dialogEdit" width="35%">
       <el-form label-width="120px">
         <el-form-item label="图书编号">
           <el-input v-model="form.bookCode" autocomplete="off" readonly></el-input>
@@ -208,7 +201,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="图书馆">
-          <el-select clearable v-model="form.libId" placeholder="请选择图书馆" @change="getOther(form.libId)">
+          <el-select v-model="form.libId" placeholder="请选择图书馆"  @change="getOther(form.libId)">
             <el-option v-for="item in librariesList"
                        :label="item.name"
                        :key="item.id"
@@ -290,7 +283,6 @@
                 total: 0,
                 pageNum: 1,
                 pageSize: 5,
-                multipleSelection: [],
                 headerBG: 'headerBG',
                 url: {
                     list: "/books/records/list",
@@ -301,9 +293,6 @@
                     getLibId:"/books/records/getLibId",
                     getOther:"/books/records/getOther/",
                     getDict:"/system/dict/getItem/",
-                },
-                props:{
-                    label : 'name',
                 },
                 expands:[],
                 checks:[],
@@ -323,7 +312,7 @@
                         bookNature:this.filters.bookNature,
                         bookCategory:this.filters.bookCategory,
                         start:this.filters.start,
-                        end:this.filters .end,
+                        end:this.filters.end,
                     }
                 }).then(res=>{
                     this.tableData = res.data.records
@@ -354,7 +343,7 @@
                         })
                         request.post(this.url.getDict + "book_nature").then(nature=>{
                             if(nature){
-                                  this.natureList = nature.data
+                                this.natureList = nature.data
                             }
                         })
                         request.post(this.url.getDict + "book_category").then(cate=>{
@@ -367,12 +356,10 @@
                 })
             },
             handleEdit(row){
-                this.dialogEdit = true
-                this.form = row
                 request.get(this.url.getLibId).then(lib =>{
-                    if (lib){
-                        this.librariesList = lib.data
-                    }
+                  if (lib){
+                      this.librariesList = lib.data
+                  }
                 })
                 request.post(this.url.getDict + "book_nature").then(nature=>{
                     if(nature){
@@ -384,11 +371,15 @@
                         this.categoryList = cate.data
                     }
                 })
+                this.form = row
+                this.dialogEdit = true
+
+
             },
             save(){
                 this.request.post(this.url.add,this.form).then(res =>{
                     if (res.code === '200'){
-                        this.$message.success("保存成功")
+                        this.$message.success(res.message)
                         this.dialogAdd = false
                         this.load()
                     }else {
@@ -399,11 +390,11 @@
             update(){
                 this.request.put(this.url.edit,this.form).then(res =>{
                     if (res){
-                        this.$message.success("编辑成功")
+                        this.$message.success(res.message)
                         this.dialogEdit = false
                         this.load()
                     }else {
-                        this.$message.error("编辑失败")
+                        this.$message.error(res.message)
                     }
                 })
             },
@@ -414,14 +405,18 @@
             remove(id){
                 this.request.delete(this.url.remove + id).then(res =>{
                     if (res){
-                        this.$message.success("删除成功")
+                        this.$message.success(res.message)
                         this.load()
                     }else {
-                        this.$message.error("删除失败")
+                        this.$message.error(res.message)
                     }
                 })
             },
             getOther(libId){
+                this.form.flower = ""
+                this.form.room = ""
+                this.form.bookShelf = ""
+                this.form.layer = ""
                 this.request.post(this.url.getOther + libId).then(res=>{
                     if (res){
                         this.floorList = res.data.floorList

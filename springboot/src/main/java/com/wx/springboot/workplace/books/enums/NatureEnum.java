@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 public enum NatureEnum {
         儿童(1, "儿童读物"),
         成人(2, "成人读物"),
-        R18(3, "R18读物"),
+        特殊(3, "特殊读物"),
         ;
 
         private Integer code;

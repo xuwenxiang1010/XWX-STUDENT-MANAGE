@@ -18,4 +18,21 @@ public interface BookRecordsMapper extends BaseMapper<BookRecords> {
      */
     String findMaxCode(@Param("prefix")String prefix);
 
+    /**
+     *查找同位置的书籍数
+     * @param positionCode
+     * @return
+     */
+    int selectPostCode(String positionCode);
+
+    /**
+     *查找同位置的书籍数(update)
+     * @param positionCode
+     * @param id
+     * @return
+     */
+    int selectPositionCode(String positionCode, String id);
+
+
+
 }
