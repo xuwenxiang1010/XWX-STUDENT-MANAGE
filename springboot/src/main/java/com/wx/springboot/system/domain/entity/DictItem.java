@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 @TableName("sys_dict_item")
 public class DictItem {
-	@TableId(type = IdType.AUTO)
+	@TableId(type = IdType.ASSIGN_ID)
 	private Long id;
 	private String code;
 	private String text;

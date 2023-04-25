@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wx.springboot.system.dao.LogMapper">
+    <select id="list" resultType="com.wx.springboot.system.domain.entity.Log">
+        select * from sys_log
+    </select>
+</mapper>

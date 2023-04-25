@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @TableName("sys_dict")
 public class Dict {
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     private String code;
     private String description;

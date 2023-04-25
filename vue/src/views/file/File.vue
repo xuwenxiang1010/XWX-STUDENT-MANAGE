@@ -3,7 +3,7 @@
     <div style="margin: 10px 0">
       <el-form :inline="true" :model="filters" ref="filters">
         <el-form-item prop="name">
-          <el-input v-model="filters.name" style="width: 150px" placeholder="请输入姓名" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
+          <el-input v-model="filters.name" style="width: 150px" placeholder="请输入文件名" suffix-icon="el-icon-set-up" class="ml-5" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="ml-5" @click="load" icon="el-icon-search">搜索</el-button>

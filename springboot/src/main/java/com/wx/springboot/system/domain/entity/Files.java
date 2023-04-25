@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @TableName("sys_file")
 public class Files {
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     private String name;
     private String type;

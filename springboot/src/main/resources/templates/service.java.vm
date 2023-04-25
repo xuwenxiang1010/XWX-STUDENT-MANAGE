@@ -18,7 +18,7 @@ public interface ${table.serviceName}{
 
 	List<${entity}> list();
 
-    IPage<${entity}> pageList(IPage<Course> page, ${entity} ${table.entityPath});
+    IPage<${entity}> pageList(IPage<${entity}> page, ${entity} ${table.entityPath});
 
     Result add(${entity} ${table.entityPath});
 
