@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @TableName("sys_log")
 @ApiModel(value = "Log对象", description = "")
+@Data
 public class Log implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,82 +48,16 @@ public class Log implements Serializable {
       @ApiModelProperty("操作类型")
       private Integer type;
 
-    
-    public String getId() {
-        return id;
+    public Log(String operationUser, String path, String time,
+                  String parameter, String title, String action, Integer type) {
+      super();
+      this.operationUser = operationUser;
+      this.path = path;
+      this.time = time;
+      this.parameter = parameter;
+      this.title = title;
+      this.action = action;
+      this.type = type;
     }
 
-      public void setId(String id) {
-          this.id = id;
-      }
-    
-    public String getOperationUser() {
-        return operationUser;
-    }
-
-      public void setOperationUser(String operationUser) {
-          this.operationUser = operationUser;
-      }
-    
-    public String getPath() {
-        return path;
-    }
-
-      public void setPath(String path) {
-          this.path = path;
-      }
-    
-    public String getTime() {
-        return time;
-    }
-
-      public void setTime(String time) {
-          this.time = time;
-      }
-    
-    public String getParameter() {
-        return parameter;
-    }
-
-      public void setParameter(String parameter) {
-          this.parameter = parameter;
-      }
-    
-    public String getTitle() {
-        return title;
-    }
-
-      public void setTitle(String title) {
-          this.title = title;
-      }
-    
-    public String getAction() {
-        return action;
-    }
-
-      public void setAction(String action) {
-          this.action = action;
-      }
-    
-    public Integer getType() {
-        return type;
-    }
-
-      public void setType(Integer type) {
-          this.type = type;
-      }
-
-    @Override
-    public String toString() {
-        return "Log{" +
-              "id=" + id +
-                  ", operationUser=" + operationUser +
-                  ", path=" + path +
-                  ", time=" + time +
-                  ", parameter=" + parameter +
-                  ", title=" + title +
-                  ", action=" + action +
-                  ", type=" + type +
-              "}";
-    }
 }

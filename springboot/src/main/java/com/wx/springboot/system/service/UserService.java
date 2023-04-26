@@ -5,6 +5,7 @@ import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.system.domain.entity.User;
 import com.wx.springboot.system.domain.dto.UserDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public interface UserService {
 
     Result batchDelete(List<Long> ids);
 
-    Result login(UserDto user);
+    Result login(UserDto user, HttpServletRequest request);
 
     Result getUserInfo(Long id);
 

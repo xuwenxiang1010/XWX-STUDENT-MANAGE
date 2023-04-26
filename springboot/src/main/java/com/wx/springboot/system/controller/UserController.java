@@ -2,6 +2,7 @@ package com.wx.springboot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wx.springboot.system.common.anno.LogAnno;
 import com.wx.springboot.system.common.vo.Result;
 import com.wx.springboot.system.domain.dto.UserDto;
 import com.wx.springboot.system.domain.entity.User;
@@ -41,6 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
+    @LogAnno(content = "添加用户",type = 1,action = "添加用户")
     public Result add(@RequestBody User user){
        Result result = userService.add(user);
        return result;

@@ -22,6 +22,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result login(UserDto dto) {
+    public Result login(UserDto dto, HttpServletRequest request) {
         String userName = dto.getUserName();
         String password = dto.getPassword();
         LambdaQueryWrapper<User> query = new LambdaQueryWrapper();
@@ -83,6 +85,8 @@ public class UserServiceImpl implements UserService {
             dto.setToken(token);
             List<Menu> roleMenu = getRoleMenu(dto.getId());
             dto.setMenuList(roleMenu);
+            HttpSession session = request.getSession();
+            session.setAttribute("userName",dto.getUserName());
             return Result.success(dto);
         }else {
             return Result.error(Constants.CODE_400,"用户名或密码错误");

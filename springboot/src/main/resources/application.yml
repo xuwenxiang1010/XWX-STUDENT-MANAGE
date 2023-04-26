@@ -1,9 +1,10 @@
 server:
-  port: 80
+  port: 8080
 
 files:
   upload:
     path: D:/Work/Code/WorkSpace/XWX-STUDENT-MANAGE/springboot/File/
+
 
 spring:
   datasource:
