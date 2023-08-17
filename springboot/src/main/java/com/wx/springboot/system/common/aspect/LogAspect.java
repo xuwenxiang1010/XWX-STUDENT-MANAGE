@@ -1,8 +1,12 @@
 package com.wx.springboot.system.common.aspect;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.Claim;
 import com.wx.springboot.system.common.anno.LogAnno;
+import com.wx.springboot.system.common.util.TokenUtil;
 import com.wx.springboot.system.dao.LogMapper;
 import com.wx.springboot.system.domain.entity.Log;
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -22,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -108,7 +113,13 @@ public class LogAspect {
 					request = getHttpServletRequest();
 					requestPath=request.getServletPath();
 					HttpSession session = request.getSession();
-					user = session.getAttribute("userName").toString();
+					user = (String) session.getAttribute("userName");
+					if(StringUtils.isEmpty(user)){
+						//非登录接口
+						String token = request.getHeader("token");
+						String userName = JWT.decode(token).getClaim("userName").asString();
+						user = userName;
+					}
 					title = method.getAnnotation(LogAnno.class).content();
 					action = method.getAnnotation(LogAnno.class).action();
 					type = method.getAnnotation(LogAnno.class).type();

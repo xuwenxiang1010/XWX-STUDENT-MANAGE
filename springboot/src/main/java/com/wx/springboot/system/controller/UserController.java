@@ -35,6 +35,7 @@ public class UserController {
 
     @GetMapping("/pageList")
     @ApiOperation(value = "分页查询")
+    @LogAnno(content = "分页查询",type = 5,action = "分页查询用户列表")
     public Result pageList(User user, @RequestParam Integer pageNum, @RequestParam Integer pageSize){
         IPage<User> page = new Page<>(pageNum,pageSize);
         IPage<User> pageList = userService.pageList(page,user);

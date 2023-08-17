@@ -30,4 +30,6 @@ public interface DictService {
     Result updateItem(DictItem item);
 
     Result deleteItem(Long itemId);
+
+    String getValueByTypeCode(String trim, String code);
 }

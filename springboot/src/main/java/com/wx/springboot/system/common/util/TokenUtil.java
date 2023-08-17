@@ -13,10 +13,10 @@ public class TokenUtil {
 
 	private static final long EXPIRE_TIME = 60 * 60 * 1000;
 
-	public static  String genToken(String userId,String sign){
+	public static  String genToken(String userId,String userName,String sign){
 		Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
 		//将userId保存到token里面，作为载荷
-		String token = JWT.create().withAudience(userId)
+		String token = JWT.create().withAudience(userId).withClaim("userName",userName)
 													// 两小时后token过期
 													.withExpiresAt(date)
 													//以密码作为token的密钥

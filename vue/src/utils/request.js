@@ -2,7 +2,7 @@ import axios from 'axios'
 import ElementUI from 'element-ui'
 
 const request = axios.create({
-  baseURL: 'http://192.168.64.10:8080/',  // 注意！！ 这里是全局统一加上了 后端接口前缀 前缀，后端必须进行跨域配置！
+  baseURL: 'http://localhost:8081/',  // 注意！！ 这里是全局统一加上了 后端接口前缀 前缀，后端必须进行跨域配置！
   timeout: 5000
 })
 

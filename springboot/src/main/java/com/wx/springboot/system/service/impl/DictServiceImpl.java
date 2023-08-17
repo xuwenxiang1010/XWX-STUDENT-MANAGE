@@ -112,4 +112,13 @@ public class DictServiceImpl implements DictService {
         return Result.success();
     }
 
+    @Override
+    public String getValueByTypeCode(String trim, String code) {
+        LambdaQueryWrapper<DictItem> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DictItem::getCode,code);
+        queryWrapper.eq(DictItem::getText,trim);
+        DictItem item = itemMapper.selectOne(queryWrapper);
+        return item.getValue();
+    }
+
 }

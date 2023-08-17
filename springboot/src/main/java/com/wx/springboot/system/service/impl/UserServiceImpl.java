@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOne(query);
         if(user != null){
             BeanUtils.copyProperties(user,dto);
-            String token = TokenUtil.genToken(dto.getId().toString(),dto.getPassword());
+            String token = TokenUtil.genToken(String.valueOf(dto.getId()),dto.getUserName(),dto.getPassword());
             dto.setToken(token);
             List<Menu> roleMenu = getRoleMenu(dto.getId());
             dto.setMenuList(roleMenu);

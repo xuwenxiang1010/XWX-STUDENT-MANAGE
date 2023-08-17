@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wx.springboot.system.common.anno.Dict;
 import lombok.Data;
 
 import java.util.Date;
@@ -28,5 +29,6 @@ public class User {
     private String phone;
     private String address;
     private String email;
-
+    @Dict(dictCode = "sex")
+    private String sex;
 }
